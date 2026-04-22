@@ -477,8 +477,9 @@ footer{text-align:center;padding:24px;border-top:1px solid var(--b0);font-family
     </div>
     <div class="fc">
       <div class="fct">USDC — USD Stablecoin</div>
-      <div class="fcd">Circle's USDC is available on Pharos Testnet. Use the Circle faucet to claim test USDC for supplying and borrowing on PharosLend.</div>
-      <button class="fb" onclick="window.open('https://faucet.circle.com','_blank')">Circle Faucet (Official) →</button>
+      <div class="fcd">Claim USDC directly from Circle's faucet (select Pharos network), or swap PHRS → USDC on Zenith DEX inside the Pharos testnet app.</div>
+      <button class="fb" onclick="window.open('https://faucet.circle.com','_blank')">Circle Faucet → (select Pharos)</button>
+      <button class="fb sec" onclick="window.open('https://testnet.pharosnetwork.xyz','_blank')">Zenith DEX — Swap PHRS → USDC</button>
       <div class="fa">ERC-20: 0xcfC8330f4BCAB529c625D12781b1C19466A9Fc8B · 6 decimals</div>
     </div>
     <div class="fc">
@@ -498,10 +499,10 @@ footer{text-align:center;padding:24px;border-top:1px solid var(--b0);font-family
       <div class="fct">Pharos Testnet Token Addresses</div>
       <div class="ag">
         <div class="ag-item"><div class="ag-lbl">USDC</div><div class="fa" style="margin:0">0xcfC8330f4BCAB529c625D12781b1C19466A9Fc8B</div></div>
-        <div class="ag-item"><div class="ag-lbl">USDT</div><div class="fa" style="margin:0">0xE7E84B8B4f39C507499c40B4ac199B050e2882d5</div></div>
-        <div class="ag-item"><div class="ag-lbl">WBTC</div><div class="fa" style="margin:0">0x0c64F03EEa5c30946D5c55B4b532D08ad74638a4</div></div>
-        <div class="ag-item"><div class="ag-lbl">WETH</div><div class="fa" style="margin:0">0x7d211F77525ea39A0592794f793cC1036eEaccD5</div></div>
-        <div class="ag-item"><div class="ag-lbl">WPHRS</div><div class="fa" style="margin:0">0x838800b758277CC111B2d48Ab01e5E164f8E9471</div></div>
+        <div class="ag-item"><div class="ag-lbl">USDT</div><div class="fa" style="margin:0">0xD4071393f8716661958F766DF660033b3d35fD29</div></div>
+        <div class="ag-item"><div class="ag-lbl">WBTC</div><div class="fa" style="margin:0">0x8275c526d1bCEc59a31d673929d3cE8d108fF5c7</div></div>
+        <div class="ag-item"><div class="ag-lbl">WETH</div><div class="fa" style="margin:0">0x4E28826d32F1C398DED160DC16Ac6873357d048f</div></div>
+        <div class="ag-item"><div class="ag-lbl">WPHRS</div><div class="fa" style="margin:0">0x3019B247381c850ab53Dc0EE53bCe7A07Ea9155f</div></div>
         <div class="ag-item"><div class="ag-lbl">PharosLend</div><div class="fa" id="contractAddr2" style="margin:0">Loading…</div></div>
       </div>
     </div>
@@ -569,7 +570,7 @@ footer{text-align:center;padding:24px;border-top:1px solid var(--b0);font-family
 
 <footer>
   PharosLend v1.0 · Pharos Testnet · Chain ID 688688<br>
-  USDC: 0xcfC8330f4BCAB529c625D12781b1C19466A9Fc8B · USDT: 0xE7E84B8B4f39C507499c40B4ac199B050e2882d5<br>
+  USDC: 0xcfC8330f4BCAB529c625D12781b1C19466A9Fc8B · USDT: 0xD4071393f8716661958F766DF660033b3d35fD29<br>
   ⚠ Testnet only — no real funds
 </footer>
 
@@ -585,7 +586,7 @@ const CHAIN_ID  = 688688;
 const EXPLORER  = "https://testnet.pharosscan.xyz";
 const RPC_URL   = "https://testnet.dplabs-internal.com";
 const USDC_ADDR = "0xcfC8330f4BCAB529c625D12781b1C19466A9Fc8B";
-const USDT_ADDR = "0xE7E84B8B4f39C507499c40B4ac199B050e2882d5";
+const USDT_ADDR = "0xD4071393f8716661958F766DF660033b3d35fD29";
 
 // Show contract address in faucet page
 document.getElementById("contractAddr").textContent  = CONTRACT;
@@ -616,15 +617,27 @@ let mode="supply", sym="USDC";
 let approvedAmt=0;
 let refreshTimer=null;
 
+// ── PROVIDER HELPER (handles multiple wallets installed) ──────
+function getProvider(){
+  if(!window.ethereum) return null;
+  // If multiple wallets are installed, providers array exists — prefer MetaMask
+  if(window.ethereum.providers?.length){
+    return window.ethereum.providers.find(p=>p.isMetaMask)
+        || window.ethereum.providers[0];
+  }
+  return window.ethereum;
+}
+
 // ── WALLET ────────────────────────────────────────────────────
 async function connectWallet(){
-  if(!window.ethereum){toast("MetaMask / Rabby not detected!","err");return;}
+  const eth=getProvider();
+  if(!eth){toast("MetaMask / Rabby not detected!","err");return;}
   if(connected)return;
   try{
     toast("Connecting…","inf");
-    const accs=await window.ethereum.request({method:"eth_requestAccounts"});
+    const accs=await eth.request({method:"eth_requestAccounts"});
     wallet=accs[0];
-    const cid=parseInt(await window.ethereum.request({method:"eth_chainId"}),16);
+    const cid=parseInt(await eth.request({method:"eth_chainId"}),16);
     if(cid!==CHAIN_ID)await addPharosNet();
     connected=true;
     const btn=document.getElementById("wbtn");
@@ -637,15 +650,16 @@ async function connectWallet(){
 }
 
 async function addPharosNet(){
-  if(!window.ethereum){toast("MetaMask or Rabby not detected — please install a wallet first.","err");return;}
+  const eth=getProvider();
+  if(!eth){toast("MetaMask or Rabby not detected — please install a wallet first.","err");return;}
   try{
-    await window.ethereum.request({method:"wallet_switchEthereumChain",
+    await eth.request({method:"wallet_switchEthereumChain",
       params:[{chainId:"0x"+CHAIN_ID.toString(16)}]});
     toast("✓ Switched to Pharos Testnet!","ok");
   }catch(e){
     if(e.code===4902){
       try{
-        await window.ethereum.request({method:"wallet_addEthereumChain",params:[{
+        await eth.request({method:"wallet_addEthereumChain",params:[{
           chainId:"0x"+CHAIN_ID.toString(16),
           chainName:"Pharos Testnet",
           nativeCurrency:{name:"PHRS",symbol:"PHRS",decimals:18},
@@ -672,7 +686,8 @@ async function loadBals(){
     try{
       const addr=s==="USDC"?USDC_ADDR:USDT_ADDR;
       const data=SEL.balanceOf+wallet.replace("0x","").padStart(64,"0");
-      const r=await window.ethereum.request({method:"eth_call",params:[{to:addr,data},"latest"]});
+      const provider=getProvider();if(!provider)return;
+      const r=await provider.request({method:"eth_call",params:[{to:addr,data},"latest"]});
       bals[s]=parseInt(r||"0x0",16)/1e6;
     }catch{bals[s]=0;}
   }
@@ -682,7 +697,8 @@ async function loadContract(){
   if(!wallet)return;
   try{
     const data=SEL.getPosition+wallet.replace("0x","").padStart(64,"0");
-    const r=await window.ethereum.request({method:"eth_call",params:[{to:CONTRACT,data},"latest"]});
+    const provider=getProvider();if(!provider)return;
+    const r=await provider.request({method:"eth_call",params:[{to:CONTRACT,data},"latest"]});
     if(r&&r.length>10){
       const c=[];for(let i=2;i<r.length;i+=64)c.push(r.slice(i,i+64));
       if(c.length>=4){
@@ -694,7 +710,7 @@ async function loadContract(){
     }
   }catch(e){console.warn("getPosition:",e.message);}
   try{
-    const r=await window.ethereum.request({method:"eth_call",params:[{to:CONTRACT,data:SEL.getStats},"latest"]});
+    const r2=await provider.request({method:"eth_call",params:[{to:CONTRACT,data:SEL.getStats},"latest"]});
     if(r&&r.length>10){
       const c=[];for(let i=2;i<r.length;i+=64)c.push(r.slice(i,i+64));
       if(c.length>=3){
@@ -798,7 +814,8 @@ async function doApprove(){
   const ap=document.getElementById("mappbtn"),ac=document.getElementById("mactbtn");
   ap.disabled=true;showTx("⏳ Waiting for approval in MetaMask…");
   try{
-    const hash=await window.ethereum.request({method:"eth_sendTransaction",params:[{from:wallet,to:tokenAddr,data,gas:"0x30D40"}]});
+    const eprov=getProvider();
+    const hash=await eprov.request({method:"eth_sendTransaction",params:[{from:wallet,to:tokenAddr,data,gas:"0x30D40"}]});
     showTx("⏳ Approval submitted — confirming…\n"+hash);
     const receipt=await waitForReceipt(hash);
     if(receipt&&receipt.status==="0x1"){
@@ -832,7 +849,8 @@ async function doAction(){
   const ac=document.getElementById("mactbtn");
   ac.disabled=true;showTx("⏳ Waiting for "+mode+" in MetaMask…");
   try{
-    const hash=await window.ethereum.request({method:"eth_sendTransaction",params:[{from:wallet,to:CONTRACT,data,gas:"0x493E0"}]});
+    const eprov=getProvider();
+    const hash=await eprov.request({method:"eth_sendTransaction",params:[{from:wallet,to:CONTRACT,data,gas:"0x493E0"}]});
     showTx("✅ "+cap(mode)+" submitted!\n"+hash);
     toast("✓ "+cap(mode)+" "+amt.toFixed(4)+" "+sym+" submitted!","ok");
     setStep(3);applyLocal(mode,sym,amt);renderAll();
@@ -847,7 +865,7 @@ async function waitForReceipt(hash,maxMs=60000){
   const t0=Date.now();let delay=1500;
   while(Date.now()-t0<maxMs){
     await sleep(delay);
-    try{const r=await window.ethereum.request({method:"eth_getTransactionReceipt",params:[hash]});if(r)return r;}catch{}
+    try{const p=getProvider();const r=await p.request({method:"eth_getTransactionReceipt",params:[hash]});if(r)return r;}catch{}
     delay=Math.min(delay*1.5,6000);
   }
   return null;
@@ -960,13 +978,14 @@ const cap=s=>s.charAt(0).toUpperCase()+s.slice(1);
 const sleep=ms=>new Promise(r=>setTimeout(r,ms));
 
 document.getElementById("ov").addEventListener("click",e=>{if(e.target===document.getElementById("ov"))closeModal();});
-if(window.ethereum){
-  window.ethereum.on("accountsChanged",a=>{
+const _eth=getProvider();
+if(_eth){
+  _eth.on("accountsChanged",a=>{
     if(!a.length){connected=false;wallet=null;clearInterval(refreshTimer);
       const b=document.getElementById("wbtn");b.textContent="Connect Wallet";b.classList.remove("on");
     }else{wallet=a[0];loadAll().then(renderAll);}
   });
-  window.ethereum.on("chainChanged",()=>location.reload());
+  _eth.on("chainChanged",()=>location.reload());
 }
 renderAll();
 </script>
