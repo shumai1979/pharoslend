@@ -1,0 +1,388 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>PharosLend — Deploy Guide</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+<style>
+:root{
+  --bg:#030f0f;--s0:#061a1a;--s1:#092222;--s2:#0d2e2e;
+  --b0:#133535;--b1:#1c4a4a;
+  --te:#0d9488;--te2:rgba(13,148,136,.12);--te3:rgba(13,148,136,.22);
+  --g:#10b981;--g2:rgba(16,185,129,.1);--g3:rgba(16,185,129,.22);
+  --r:#f43f5e;--r2:rgba(244,63,94,.1);
+  --y:#f59e0b;--y2:rgba(245,158,11,.1);
+  --arc:#3b82f6;--arc2:#60a5fa;--arc3:rgba(59,130,246,.1);
+  --t:#e8fff8;--t2:#6baaaa;--t3:#2d6060;
+  --rad:10px;--rad-lg:14px;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+body{background:var(--bg);color:var(--t);font-family:'IBM Plex Sans',sans-serif;line-height:1.7;min-height:100vh;
+  background-image:radial-gradient(ellipse 70% 50% at 15% -5%,rgba(13,148,136,.07) 0%,transparent 55%),
+  radial-gradient(ellipse 40% 35% at 90% 110%,rgba(16,185,129,.05) 0%,transparent 55%);
+}
+
+/* ── TOP BAR ── */
+.bar{background:rgba(3,15,15,.9);backdrop-filter:blur(20px);border-bottom:1px solid var(--b0);
+  height:60px;padding:0 32px;display:flex;align-items:center;gap:14px;
+  position:sticky;top:0;z-index:100;}
+.logo{display:flex;align-items:center;gap:10px;text-decoration:none;color:var(--t);
+  font-family:'Syne',sans-serif;font-size:1.18rem;font-weight:800;letter-spacing:-.03em;}
+.lm{width:28px;height:28px;border-radius:8px;
+  background:linear-gradient(135deg,var(--te) 0%,var(--g) 100%);
+  display:flex;align-items:center;justify-content:center;
+  font-size:.58rem;font-weight:700;color:#fff;font-family:'IBM Plex Mono',monospace;
+  box-shadow:0 0 14px rgba(13,148,136,.4);flex-shrink:0;}
+.badge{font-family:'IBM Plex Mono',monospace;font-size:.55rem;
+  background:var(--s1);border:1px solid var(--b1);color:var(--t3);
+  padding:2px 8px;border-radius:5px;letter-spacing:.08em;text-transform:uppercase;}
+
+/* ── LAYOUT ── */
+.wrap{max-width:820px;margin:0 auto;padding:40px 24px 64px;}
+
+/* ── HERO ── */
+.hero{text-align:center;padding:48px 0 40px;}
+.hero h1{font-family:'Syne',sans-serif;font-size:2.4rem;font-weight:800;
+  letter-spacing:-.05em;line-height:1.1;
+  background:linear-gradient(135deg,#fff 30%,var(--te) 100%);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+  margin-bottom:12px;}
+.hero p{font-size:.9rem;color:var(--t2);max-width:480px;margin:0 auto;line-height:1.65;}
+
+/* ── STEP CARDS ── */
+.steps{display:flex;flex-direction:column;gap:20px;}
+.step{background:var(--s0);border:1px solid var(--b0);border-radius:var(--rad-lg);overflow:hidden;position:relative;}
+.step-hd{padding:16px 20px;border-bottom:1px solid var(--b0);
+  display:flex;align-items:center;gap:14px;cursor:pointer;user-select:none;}
+.step-hd:hover{background:var(--s1);}
+.snum{width:34px;height:34px;border-radius:50%;background:var(--s2);border:1.5px solid var(--b1);
+  display:flex;align-items:center;justify-content:center;
+  font-family:'IBM Plex Mono',monospace;font-size:.75rem;font-weight:700;color:var(--te);
+  flex-shrink:0;}
+.stitle{font-family:'Syne',sans-serif;font-weight:700;font-size:1rem;flex:1;}
+.schev{font-size:.8rem;color:var(--t3);transition:transform .2s;}
+.step-bd{padding:20px;}
+.step-bd p{font-size:.84rem;color:var(--t2);margin-bottom:12px;line-height:1.65;}
+.step-bd p:last-child{margin:0;}
+
+/* ── CODE BLOCKS ── */
+.cb{background:var(--s2);border:1px solid var(--b1);border-radius:8px;
+  padding:13px 16px;font-family:'IBM Plex Mono',monospace;font-size:.75rem;
+  color:#5eead4;line-height:1.7;overflow-x:auto;margin:12px 0;position:relative;}
+.cb .cmt{color:var(--t3);}
+.cb .key{color:var(--arc2);}
+.cb .val{color:#a78bfa;}
+.cb .addr{color:var(--y);}
+.cb .ok{color:var(--g);}
+.cp-btn{position:absolute;top:8px;right:8px;background:var(--b1);border:none;
+  color:var(--t3);font-family:'IBM Plex Mono',monospace;font-size:.62rem;
+  padding:3px 9px;border-radius:5px;cursor:pointer;transition:all .15s;}
+.cp-btn:hover{background:var(--te);color:#fff;}
+
+/* ── INFO BOXES ── */
+.info{border-radius:8px;padding:12px 15px;margin:12px 0;font-size:.8rem;line-height:1.6;display:flex;gap:10px;}
+.info-icon{flex-shrink:0;font-size:1rem;margin-top:1px;}
+.info.tip{background:var(--g2);border:1px solid var(--g3);color:var(--g);}
+.info.warn{background:var(--y2);border:1px solid rgba(245,158,11,.25);color:var(--y);}
+.info.err{background:var(--r2);border:1px solid rgba(244,63,94,.22);color:var(--r);}
+.info.inf{background:var(--arc3);border:1px solid rgba(59,130,246,.22);color:var(--arc2);}
+
+/* ── FIELD TABLE ── */
+.ftbl{width:100%;border-collapse:collapse;font-size:.78rem;margin:12px 0;}
+.ftbl th{text-align:left;font-family:'IBM Plex Mono',monospace;font-size:.62rem;
+  text-transform:uppercase;letter-spacing:.08em;color:var(--t3);
+  padding:6px 10px;border-bottom:1px solid var(--b0);}
+.ftbl td{padding:9px 10px;border-bottom:1px solid var(--s2);vertical-align:top;}
+.ftbl tr:last-child td{border:none;}
+.ftbl td:first-child{font-family:'IBM Plex Mono',monospace;color:var(--te);font-weight:500;white-space:nowrap;}
+.ftbl td:last-child{color:var(--t2);}
+.mono{font-family:'IBM Plex Mono',monospace;font-size:.72rem;color:var(--y);word-break:break-all;}
+
+/* ── CHECKLIST ── */
+.cl{list-style:none;display:flex;flex-direction:column;gap:8px;margin:10px 0;}
+.cl li{display:flex;align-items:flex-start;gap:10px;font-size:.82rem;color:var(--t2);line-height:1.5;}
+.cl li::before{content:"□";font-family:'IBM Plex Mono',monospace;color:var(--te);flex-shrink:0;margin-top:1px;}
+
+/* ── ADDR CHIP ── */
+.chip{display:inline-flex;align-items:center;gap:7px;
+  background:var(--s2);border:1px solid var(--b1);border-radius:6px;
+  padding:5px 10px;font-family:'IBM Plex Mono',monospace;font-size:.68rem;
+  color:var(--y);cursor:pointer;transition:all .15s;margin:3px 0;}
+.chip:hover{border-color:var(--te);color:var(--t);}
+.chip-lbl{color:var(--t3);font-size:.6rem;margin-right:2px;}
+
+/* ── SUCCESS BOX ── */
+.success{background:linear-gradient(135deg,var(--g2),var(--te2));
+  border:1px solid var(--g3);border-radius:var(--rad-lg);padding:22px 24px;margin-top:24px;text-align:center;}
+.success h3{font-family:'Syne',sans-serif;font-weight:800;font-size:1.2rem;color:var(--g);margin-bottom:8px;}
+.success p{font-size:.82rem;color:var(--t2);line-height:1.65;}
+
+/* ── SECTION DIVIDER ── */
+.divider{text-align:center;font-family:'IBM Plex Mono',monospace;font-size:.6rem;
+  color:var(--t3);letter-spacing:.12em;text-transform:uppercase;
+  margin:28px 0 20px;display:flex;align-items:center;gap:12px;}
+.divider::before,.divider::after{content:"";flex:1;height:1px;background:var(--b0);}
+
+/* ── FOOTER ── */
+footer{text-align:center;border-top:1px solid var(--b0);padding:24px;
+  font-family:'IBM Plex Mono',monospace;font-size:.58rem;color:var(--t3);line-height:2.2;}
+
+@media(max-width:600px){
+  .wrap{padding:24px 14px 48px;}
+  .hero h1{font-size:1.75rem;}
+  .step-bd{padding:14px;}
+  .bar{padding:0 16px;}
+}
+</style>
+</head>
+<body>
+
+<header class="bar">
+  <a class="logo" href="#">
+    <div class="lm">PL</div>
+    PharosLend
+  </a>
+  <span class="badge">Deploy Guide</span>
+</header>
+
+<div class="wrap">
+
+  <div class="hero">
+    <h1>Deploy to Pharos Testnet</h1>
+    <p>Step-by-step instructions to deploy PharosLend.sol with Remix IDE and wire it into the frontend.</p>
+  </div>
+
+  <!-- ── PRE-FLIGHT ────────────────────────────────────────────────── -->
+  <div class="divider">Before you start</div>
+
+  <div class="info tip">
+    <span class="info-icon">✓</span>
+    <span>You need MetaMask (or Rabby) with some PHRS for gas. Use the Faucet page inside <code>pharos-index.html</code> to get PHRS and USDC before deploying.</span>
+  </div>
+  <div class="info inf">
+    <span class="info-icon">ℹ</span>
+    <span>Pharos Testnet details — Chain ID: <strong>688688</strong> · RPC: <strong>https://testnet.dplabs-internal.com</strong> · Explorer: <strong>https://testnet.pharosscan.xyz</strong></span>
+  </div>
+
+  <div class="steps">
+
+    <!-- ── STEP 1 ── -->
+    <div class="step">
+      <div class="step-hd">
+        <div class="snum">1</div>
+        <div class="stitle">Open Remix IDE &amp; load the contract</div>
+      </div>
+      <div class="step-bd">
+        <p>Go to <a href="https://remix.ethereum.org" target="_blank" style="color:#2dd4bf">remix.ethereum.org</a> in your browser. In the <strong>File Explorer</strong> (left panel), create a new file called <strong>PharosLend.sol</strong>.</p>
+        <p>Paste the full contents of your <code>PharosLend.sol</code> file into the editor. The top comment block contains all the addresses and selectors for reference.</p>
+        <div class="info tip">
+          <span class="info-icon">💡</span>
+          <span>Alternatively, click the GitHub icon in Remix's file explorer and import directly from a GitHub Gist or repo if you've pushed the file there.</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── STEP 2 ── -->
+    <div class="step">
+      <div class="step-hd">
+        <div class="snum">2</div>
+        <div class="stitle">Compile the contract</div>
+      </div>
+      <div class="step-bd">
+        <p>Click the <strong>Solidity Compiler</strong> tab (the "S" shield icon on the left sidebar).</p>
+        <table class="ftbl">
+          <tr><th>Setting</th><th>Value</th></tr>
+          <tr><td>Compiler version</td><td>0.8.20 or higher (any 0.8.x)</td></tr>
+          <tr><td>EVM version</td><td>Default (paris)</td></tr>
+          <tr><td>Optimisation</td><td>✓ Enabled — 200 runs</td></tr>
+        </table>
+        <p>Click <strong>Compile PharosLend.sol</strong>. You should see a green ✓ badge on the compiler icon. If there are any errors, make sure the pragma at the top of the file reads <code>^0.8.20</code>.</p>
+      </div>
+    </div>
+
+    <!-- ── STEP 3 ── -->
+    <div class="step">
+      <div class="step-hd">
+        <div class="snum">3</div>
+        <div class="stitle">Connect MetaMask to Pharos Testnet</div>
+      </div>
+      <div class="step-bd">
+        <p>In Remix, click the <strong>Deploy &amp; Run Transactions</strong> tab (the Ethereum logo icon).</p>
+        <p>In the <em>Environment</em> dropdown, choose <strong>Injected Provider – MetaMask</strong>. MetaMask will pop up asking permission — approve it.</p>
+        <div class="info warn">
+          <span class="info-icon">⚠</span>
+          <span>Make sure your MetaMask is on the <strong>Pharos Testnet (Chain ID 688688)</strong> network <em>before</em> clicking Deploy. Open <code>pharos-index.html</code> → Faucet tab → "Add Pharos Testnet Automatically" if needed.</span>
+        </div>
+        <p>Once connected, Remix will show your wallet address and balance at the top of the Deploy panel.</p>
+      </div>
+    </div>
+
+    <!-- ── STEP 4 ── -->
+    <div class="step">
+      <div class="step-hd">
+        <div class="snum">4</div>
+        <div class="stitle">Deploy the contract</div>
+      </div>
+      <div class="step-bd">
+        <p>In the <em>Contract</em> dropdown, select <strong>PharosLend</strong>. You will see two constructor arguments appear below:</p>
+        <table class="ftbl">
+          <tr><th>Parameter</th><th>Value to paste</th></tr>
+          <tr>
+            <td>_usdc</td>
+            <td><span class="mono">0xcfC8330f4BCAB529c625D12781b1C19466A9Fc8B</span></td>
+          </tr>
+          <tr>
+            <td>_usdt</td>
+            <td><span class="mono">0xE7E84B8B4f39C507499c40B4ac199B050e2882d5</span></td>
+          </tr>
+        </table>
+        <div class="cb">
+<span class="cmt">// Copy-paste these into Remix constructor fields:</span>
+
+<span class="key">_usdc:</span>  <span class="addr">0xcfC8330f4BCAB529c625D12781b1C19466A9Fc8B</span>
+<span class="key">_usdt:</span>  <span class="addr">0xE7E84B8B4f39C507499c40B4ac199B050e2882d5</span>
+<button class="cp-btn" onclick="copyAddr()">copy</button></div>
+        <p>Click <strong>Deploy</strong> (the orange button). MetaMask will pop up — review and confirm the transaction. Wait for the transaction to confirm (~5–10 seconds on Pharos Testnet).</p>
+        <div class="info tip">
+          <span class="info-icon">✓</span>
+          <span>Leave the Gas Limit at Remix's estimated value. The deployment should cost a tiny amount of PHRS.</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── STEP 5 ── -->
+    <div class="step">
+      <div class="step-hd">
+        <div class="snum">5</div>
+        <div class="stitle">Copy your contract address</div>
+      </div>
+      <div class="step-bd">
+        <p>After the transaction confirms, your deployed contract appears in the <em>Deployed Contracts</em> section at the bottom of Remix's Deploy panel.</p>
+        <p>Click the <strong>copy icon</strong> next to the contract address (it looks like <code>0xABCD…1234</code>). Save this — you'll need it in the next step.</p>
+        <p>You can also verify it appeared on the explorer:</p>
+        <div class="info inf">
+          <span class="info-icon">🔍</span>
+          <span>Open <a href="https://testnet.pharosscan.xyz" target="_blank" style="color:#60a5fa">testnet.pharosscan.xyz</a> and search for your address to confirm the contract is live.</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── STEP 6 ── -->
+    <div class="step">
+      <div class="step-hd">
+        <div class="snum">6</div>
+        <div class="stitle">Paste the address into pharos-index.html</div>
+      </div>
+      <div class="step-bd">
+        <p>Open <code>pharos-index.html</code> in your code editor (VS Code, Notepad++, etc.). Find this line near the top of the <code>&lt;script&gt;</code> block:</p>
+        <div class="cb"><span class="key">const CONTRACT</span>  = <span class="val">"0xYOUR_DEPLOYED_CONTRACT_ADDRESS"</span>; <span class="cmt">// ← paste after Remix deploy</span></div>
+        <p>Replace <code>0xYOUR_DEPLOYED_CONTRACT_ADDRESS</code> with your actual contract address, for example:</p>
+        <div class="cb"><span class="key">const CONTRACT</span>  = <span class="addr">"0xAbCdEf1234567890AbCdEf1234567890AbCdEf12"</span>;</div>
+        <p>Save the file. That's the only change needed — the frontend is fully wired to use it automatically.</p>
+      </div>
+    </div>
+
+    <!-- ── STEP 7 ── -->
+    <div class="step">
+      <div class="step-hd">
+        <div class="snum">7</div>
+        <div class="stitle">Seed initial liquidity (so users can borrow)</div>
+      </div>
+      <div class="step-bd">
+        <p>The contract is live but has no tokens yet. Users can supply tokens, but borrowing requires pre-seeded liquidity. Call <code>seedLiquidity</code> in Remix to deposit some USDC/USDT so the pool is ready.</p>
+        <p><strong>Two-step process for each token:</strong></p>
+        <ol style="font-size:.82rem;color:var(--t2);padding-left:1.2rem;line-height:2;">
+          <li>In Remix, switch to the <strong>USDC token contract</strong> — paste <code>0xcfC8330f4BCAB529c625D12781b1C19466A9Fc8B</code> in the "At Address" field, contract = <code>IERC20</code> (or use a minimal ERC-20 ABI).</li>
+          <li>Call <code>approve(spender, amount)</code> where <em>spender</em> is your PharosLend address and <em>amount</em> is in 6-decimal units (e.g. 1000 USDC = <code>1000000000</code>).</li>
+          <li>Confirm in MetaMask, then switch back to the <strong>PharosLend contract</strong>.</li>
+          <li>Call <code>seedLiquidity(token, amount)</code> with the USDC address and the same amount.</li>
+          <li>Repeat for USDT (<code>0xE7E84B8B4f39C507499c40B4ac199B050e2882d5</code>).</li>
+        </ol>
+        <div class="info tip">
+          <span class="info-icon">💡</span>
+          <span>Alternatively you can just supply tokens via the frontend UI itself — any supply increases the pool liquidity available for borrowers.</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── STEP 8 ── -->
+    <div class="step">
+      <div class="step-hd">
+        <div class="snum">8</div>
+        <div class="stitle">Open the frontend and test</div>
+      </div>
+      <div class="step-bd">
+        <p>Open <code>pharos-index.html</code> directly in your browser (double-click the file, or drag it into Chrome). No server is needed — it's a fully self-contained file.</p>
+        <ul class="cl">
+          <li>Click <strong>Connect Wallet</strong> and approve MetaMask on Pharos Testnet</li>
+          <li>Go to <strong>Markets</strong> — supply some USDC or USDT</li>
+          <li>Go to <strong>Dashboard</strong> — confirm your position and health factor appear</li>
+          <li>Try <strong>Borrow</strong> — borrow up to 80% of your collateral value</li>
+          <li>Verify every transaction appears on <a href="https://testnet.pharosscan.xyz" target="_blank" style="color:#2dd4bf">testnet.pharosscan.xyz</a></li>
+        </ul>
+        <div class="info tip">
+          <span class="info-icon">🎉</span>
+          <span>If all transactions succeed and the dashboard updates correctly, your deployment is complete!</span>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- /steps -->
+
+  <!-- ── QUICK REFERENCE ── -->
+  <div class="divider">Quick Reference</div>
+
+  <div class="step">
+    <div class="step-hd">
+      <div class="snum" style="background:var(--te2);border-color:var(--te)">★</div>
+      <div class="stitle">All addresses at a glance</div>
+    </div>
+    <div class="step-bd">
+      <table class="ftbl">
+        <tr><th>Token / Contract</th><th>Address</th><th>Decimals</th></tr>
+        <tr><td>USDC</td><td><span class="mono">0xcfC8330f4BCAB529c625D12781b1C19466A9Fc8B</span></td><td>6</td></tr>
+        <tr><td>USDT</td><td><span class="mono">0xE7E84B8B4f39C507499c40B4ac199B050e2882d5</span></td><td>6</td></tr>
+        <tr><td>WBTC</td><td><span class="mono">0x0c64F03EEa5c30946D5c55B4b532D08ad74638a4</span></td><td>8</td></tr>
+        <tr><td>WETH</td><td><span class="mono">0x7d211F77525ea39A0592794f793cC1036eEaccD5</span></td><td>18</td></tr>
+        <tr><td>WPHRS</td><td><span class="mono">0x838800b758277CC111B2d48Ab01e5E164f8E9471</span></td><td>18</td></tr>
+        <tr><td>PharosLend</td><td><em style="color:var(--t3)">after you deploy ↑</em></td><td>—</td></tr>
+      </table>
+      <table class="ftbl" style="margin-top:16px">
+        <tr><th>Network Detail</th><th>Value</th></tr>
+        <tr><td>Chain ID</td><td>688688</td></tr>
+        <tr><td>RPC URL</td><td><span class="mono">https://testnet.dplabs-internal.com</span></td></tr>
+        <tr><td>Block Explorer</td><td><span class="mono">https://testnet.pharosscan.xyz</span></td></tr>
+        <tr><td>Gas token</td><td>PHRS (18 decimals)</td></tr>
+        <tr><td>Faucet</td><td><span class="mono">https://testnet.pharosnetwork.xyz</span></td></tr>
+        <tr><td>USDC faucet</td><td><span class="mono">https://faucet.circle.com</span></td></tr>
+      </table>
+    </div>
+  </div>
+
+  <div class="success">
+    <h3>🚀 PharosLend is live!</h3>
+    <p>Once deployed, share <code>pharos-index.html</code> with your testers. Every action — supply, borrow, withdraw, repay — is a real on-chain transaction on Pharos Testnet.<br><br>
+    Supply APY: <strong>5.20%</strong> · Borrow APR: <strong>8.90%</strong> · Max LTV: <strong>80%</strong> · Liquidation threshold: <strong>85%</strong></p>
+  </div>
+
+</div><!-- /wrap -->
+
+<footer>
+  PharosLend v1.0 · Pharos Testnet · Chain ID 688688<br>
+  USDC: 0xcfC8330f4BCAB529c625D12781b1C19466A9Fc8B · USDT: 0xE7E84B8B4f39C507499c40B4ac199B050e2882d5<br>
+  ⚠ Testnet only — no real funds
+</footer>
+
+<script>
+function copyAddr(){
+  navigator.clipboard.writeText(
+    "0xcfC8330f4BCAB529c625D12781b1C19466A9Fc8B\n0xE7E84B8B4f39C507499c40B4ac199B050e2882d5"
+  ).then(()=>{
+    const b=event.target;b.textContent="copied!";
+    setTimeout(()=>b.textContent="copy",1800);
+  });
+}
+</script>
+</body>
+</html>
