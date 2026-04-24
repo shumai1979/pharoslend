@@ -256,6 +256,42 @@ footer{text-align:center;padding:24px;border-top:1px solid var(--b0);font-family
   .mb{padding:14px;}.hftop{flex-direction:column;gap:12px;}.hfmeta{text-align:left;}
 }
 
+/* ── PHRS HEADER BALANCE ── */
+.phrs-bal{font-family:'IBM Plex Mono',monospace;font-size:.68rem;color:var(--g);
+  background:var(--g2);border:1px solid var(--g3);border-radius:20px;
+  padding:4px 11px;display:none;align-items:center;gap:5px;white-space:nowrap;cursor:pointer;}
+.phrs-bal.on{display:flex;}
+.phrs-bal:hover{background:var(--g3);}
+
+/* ── WALLET BALANCES PANEL ── */
+.bals-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:12px;}
+@media(max-width:700px){.bals-grid{grid-template-columns:repeat(2,1fr);}}
+.bal-card{background:var(--s0);border:1px solid var(--b0);border-radius:var(--rad);
+  padding:14px 16px;transition:border-color .15s;}
+.bal-card:hover{border-color:var(--b2);}
+.bal-top{display:flex;align-items:center;gap:8px;margin-bottom:8px;}
+.bal-sym{font-family:'IBM Plex Mono',monospace;font-size:.78rem;font-weight:600;color:var(--t2);}
+.bal-amt{font-size:1.05rem;font-weight:700;color:var(--t);margin:2px 0;}
+.bal-usd{font-size:.72rem;color:var(--t2);}
+.bal-native{font-size:.6rem;color:var(--g);margin-top:2px;}
+
+/* ── MARKET CARD IMPROVEMENTS ── */
+.util-detail{display:flex;justify-content:space-between;font-size:.63rem;color:var(--t2);
+  margin-bottom:4px;font-family:'IBM Plex Mono',monospace;}
+
+/* ── COPY BUTTON ── */
+.copy-btn{background:none;border:1px solid var(--b1);border-radius:5px;
+  color:var(--t2);padding:2px 7px;cursor:pointer;font-size:.6rem;
+  font-family:'IBM Plex Mono',monospace;transition:all .15s;flex-shrink:0;}
+.copy-btn:hover{border-color:var(--te);color:var(--te);}
+.copy-btn.copied{border-color:var(--g);color:var(--g);}
+
+/* ── EXPLORER LINK ── */
+.exp-link{display:inline-flex;align-items:center;gap:5px;font-family:'IBM Plex Mono',monospace;
+  font-size:.65rem;color:var(--t2);text-decoration:none;border:1px solid var(--b1);
+  border-radius:6px;padding:3px 9px;transition:all .15s;}
+.exp-link:hover{border-color:var(--te);color:var(--te);}
+
 /* ── WALLET PICKER ── */
 .wp-ov{position:fixed;inset:0;background:rgba(0,0,0,.7);backdrop-filter:blur(8px);
   z-index:300;display:none;align-items:center;justify-content:center;}
@@ -294,6 +330,9 @@ footer{text-align:center;padding:24px;border-top:1px solid var(--b0);font-family
   </nav>
   <div class="br">
     <div class="npill"><div class="ndot"></div>Pharos Atlantic · 688689</div>
+    <div class="phrs-bal" id="phrsBal" title="Native PHRS balance" onclick="goPage('dashboard',document.querySelectorAll('.nb')[1])">
+      <span id="phrsAmt">0.000</span> PHRS
+    </div>
     <button class="wbtn" id="wbtn" onclick="connectWallet()">Connect Wallet</button>
   </div>
 </header>
@@ -363,74 +402,136 @@ footer{text-align:center;padding:24px;border-top:1px solid var(--b0);font-family
       <div id="borPos"><div class="pe">No borrow positions yet.</div></div>
     </div>
   </div>
+
+  <!-- WALLET BALANCES -->
+  <div class="dc" style="margin-top:18px">
+    <div class="dh">
+      <span class="dht">Wallet Balances</span>
+      <div style="display:flex;align-items:center;gap:10px">
+        <span class="dhv" id="totalWalletUsd">—</span>
+        <a class="exp-link" id="expLink" href="#" target="_blank" style="display:none">Explorer ↗</a>
+      </div>
+    </div>
+    <div class="bals-grid" id="balsGrid">
+      <div class="pe" style="grid-column:1/-1">Connect wallet to see balances</div>
+    </div>
+  </div>
 </section>
 
 <!-- FAUCET -->
 <section class="page" id="page-faucet">
   <div class="ph">
     <h1>Faucet &amp; Token Guide</h1>
-    <p>Get testnet tokens and configure Pharos Testnet in your wallet</p>
+    <p>Pharos Atlantic Testnet (Chain 688689) · Obtém tokens e configura a rede</p>
   </div>
   <div class="fg">
     <div class="fc">
       <div class="fct">PHRS — Native Gas Token</div>
-      <div class="fcd">PHRS is the native gas token. You need it to pay transaction fees. Claim free PHRS from the official Pharos faucet or ZAN.</div>
-      <button class="fb" onclick="window.open('https://testnet.pharosnetwork.xyz','_blank')">Pharos Faucet (Official) →</button>
-      <button class="fb sec" onclick="window.open('https://zan.top/faucet/pharos','_blank')">ZAN Faucet (Alternative) →</button>
-      <div class="fa">Native · 18 decimals · Chain ID: 688688</div>
+      <div class="fcd">PHRS é o token de gas nativo. Precisas dele para pagar transações. Obtém PHRS grátis no faucet oficial da Pharos.</div>
+      <button class="fb" onclick="window.open('https://testnet.pharosnetwork.xyz','_blank')">Pharos Faucet (Oficial) →</button>
+      <button class="fb sec" onclick="window.open('https://zan.top/faucet/pharos','_blank')">ZAN Faucet (Alternativo) →</button>
+      <div class="fa">Nativo · 18 decimais · Chain ID: 688689</div>
     </div>
     <div class="fc">
       <div class="fct">USDC — USD Coin</div>
-      <div class="fcd">Claim USDC directly from Circle's faucet (select Pharos network), or swap PHRS → USDC on Zenith DEX inside the Pharos testnet app.</div>
-      <button class="fb" onclick="window.open('https://faucet.circle.com','_blank')">Circle Faucet → (select Pharos)</button>
-      <button class="fb sec" onclick="window.open('https://testnet.pharosnetwork.xyz','_blank')">Zenith DEX — Swap PHRS → USDC</button>
-      <div class="fa">0xcfC8330f4BCAB529c625D12781b1C19466A9Fc8B · 6 decimals</div>
+      <div class="fcd">Swap PHRS → USDC no Zenith DEX dentro da app Pharos testnet, ou usa o faucet Circle (seleciona Pharos).</div>
+      <button class="fb" onclick="window.open('https://testnet.pharosnetwork.xyz','_blank')">Zenith DEX — Swap PHRS → USDC</button>
+      <button class="fb sec" onclick="window.open('https://faucet.circle.com','_blank')">Circle Faucet →</button>
+      <div style="display:flex;align-items:center;gap:6px;margin-top:8px">
+        <div class="fa" style="margin:0;flex:1">0xcfC8330f4BCAB529c625D12781b1C19466A9Fc8B</div>
+        <button class="copy-btn" onclick="copyAddr('0xcfC8330f4BCAB529c625D12781b1C19466A9Fc8B',this)">copy</button>
+      </div>
     </div>
     <div class="fc">
       <div class="fct">USDT — Tether USD</div>
-      <div class="fcd">Swap PHRS for USDT on Zenith DEX inside the Pharos testnet app. No external faucet needed.</div>
+      <div class="fcd">Swap PHRS → USDT no Zenith DEX. Sem faucet externo necessário.</div>
       <button class="fb" onclick="window.open('https://testnet.pharosnetwork.xyz','_blank')">Zenith DEX — Swap PHRS → USDT</button>
-      <div class="fa">0xE7E84B8B4f39C507499c40B4ac199B050e2882d5 · 6 decimals</div>
+      <div style="display:flex;align-items:center;gap:6px;margin-top:8px">
+        <div class="fa" style="margin:0;flex:1">0xE7E84B8B4f39C507499c40B4ac199B050e2882d5</div>
+        <button class="copy-btn" onclick="copyAddr('0xE7E84B8B4f39C507499c40B4ac199B050e2882d5',this)">copy</button>
+      </div>
     </div>
     <div class="fc">
       <div class="fct">WBTC — Wrapped Bitcoin</div>
-      <div class="fcd">Swap PHRS for WBTC on Zenith DEX. WBTC has 18 decimals on Pharos Testnet. Even small amounts count as collateral.</div>
+      <div class="fcd">Swap PHRS → WBTC no Zenith DEX. WBTC tem 18 decimais na Pharos. Mesmo pequenas quantidades valem como colateral (~$98k/BTC).</div>
       <button class="fb" onclick="window.open('https://testnet.pharosnetwork.xyz','_blank')">Zenith DEX — Swap PHRS → WBTC</button>
-      <div class="fa">0x0c64F03EEa5c30946D5c55B4b532D08ad74638a4 · 18 decimals · ~$98,000/BTC</div>
+      <div style="display:flex;align-items:center;gap:6px;margin-top:8px">
+        <div class="fa" style="margin:0;flex:1">0x0c64F03EEa5c30946D5c55B4b532D08ad74638a4</div>
+        <button class="copy-btn" onclick="copyAddr('0x0c64F03EEa5c30946D5c55B4b532D08ad74638a4',this)">copy</button>
+      </div>
     </div>
     <div class="fc">
       <div class="fct">WETH — Wrapped Ether</div>
-      <div class="fcd">Swap PHRS for WETH on Zenith DEX. WETH is one of the most liquid assets on Pharos Testnet.</div>
+      <div class="fcd">Swap PHRS → WETH no Zenith DEX. Um dos ativos mais líquidos na Pharos (~$3,200/ETH).</div>
       <button class="fb" onclick="window.open('https://testnet.pharosnetwork.xyz','_blank')">Zenith DEX — Swap PHRS → WETH</button>
-      <div class="fa">0x7d211F77525ea39A0592794f793cC1036eEaccD5 · 18 decimals · ~$3,200/ETH</div>
+      <div style="display:flex;align-items:center;gap:6px;margin-top:8px">
+        <div class="fa" style="margin:0;flex:1">0x7d211F77525ea39A0592794f793cC1036eEaccD5</div>
+        <button class="copy-btn" onclick="copyAddr('0x7d211F77525ea39A0592794f793cC1036eEaccD5',this)">copy</button>
+      </div>
     </div>
     <div class="fc">
       <div class="fct">WPHRS — Wrapped PHRS</div>
-      <div class="fcd">Wrap your PHRS into WPHRS via the Pharos testnet app. WPHRS is the ERC-20 version of the native PHRS token, usable in DeFi protocols.</div>
+      <div class="fcd">Envolve o teu PHRS em WPHRS via a app Pharos. WPHRS é a versão ERC-20 do PHRS nativo, usável em protocolos DeFi.</div>
       <button class="fb" onclick="window.open('https://testnet.pharosnetwork.xyz','_blank')">Pharos App — Wrap PHRS → WPHRS</button>
-      <div class="fa">0x838800b758277CC111B2d48Ab01e5E164f8E9471 · 18 decimals</div>
+      <div style="display:flex;align-items:center;gap:6px;margin-top:8px">
+        <div class="fa" style="margin:0;flex:1">0x838800b758277CC111B2d48Ab01e5E164f8E9471</div>
+        <button class="copy-btn" onclick="copyAddr('0x838800b758277CC111B2d48Ab01e5E164f8E9471',this)">copy</button>
+      </div>
     </div>
     <div class="fc">
-      <div class="fct">Add Pharos Testnet to Wallet</div>
-      <div class="fcd">Add Pharos Testnet to MetaMask or Rabby automatically in one click.</div>
-      <button class="fb" onclick="addPharosNet()">Add Pharos Testnet Automatically</button>
-      <button class="fb sec" onclick="window.open('https://testnet.pharosscan.xyz','_blank')">Pharos Block Explorer →</button>
-      <div class="fa">Chain ID: 688688 · RPC: testnet.dplabs-internal.com · Gas: PHRS</div>
+      <div class="fct">Adicionar Pharos Atlantic à Carteira</div>
+      <div class="fcd">Adiciona a Pharos Atlantic Testnet ao MetaMask ou Rabby automaticamente com um clique.</div>
+      <button class="fb" onclick="addPharosNet()">Adicionar Pharos Atlantic Automaticamente</button>
+      <button class="fb sec" onclick="window.open('https://atlantic.pharosscan.xyz','_blank')">Atlantic Explorer →</button>
+      <div class="fa">Chain ID: 688689 · RPC: atlantic.dplabs-internal.com · Gas: PHRS</div>
     </div>
     <div class="fc">
-      <div class="fct">PharosLend Contract</div>
-      <div class="fcd">PharosLend v2 supports 5 assets. Supply any token as collateral and borrow up to 80% LTV in any asset.</div>
-      <button class="fb" onclick="window.open('https://testnet.pharosscan.xyz/address/'+CONTRACT,'_blank')">View Contract on Explorer →</button>
-      <div class="fa" id="contractAddr">Loading…</div>
+      <div class="fct">Contrato PharosLend</div>
+      <div class="fcd">PharosLend v2 suporta 5 ativos. Faz supply de qualquer token como colateral e pede emprestado até 80% LTV em qualquer ativo.</div>
+      <button class="fb" onclick="window.open(EXPLORER+'/address/'+CONTRACT,'_blank')">Ver Contrato no Explorer →</button>
+      <div style="display:flex;align-items:center;gap:6px;margin-top:8px">
+        <div class="fa" id="contractAddr" style="margin:0;flex:1">Loading…</div>
+        <button class="copy-btn" onclick="copyAddr(CONTRACT,this)">copy</button>
+      </div>
     </div>
     <div class="fc" style="grid-column:1/-1">
-      <div class="fct">Official Pharos Testnet Token Addresses</div>
-      <div class="ag" style="grid-template-columns:repeat(5,1fr)">
-        <div class="ag-item"><div class="ag-lbl">USDC (6 dec)</div><div class="fa" style="margin:0">0xcfC8330f4BCAB529c625D12781b1C19466A9Fc8B</div></div>
-        <div class="ag-item"><div class="ag-lbl">USDT (6 dec)</div><div class="fa" style="margin:0">0xE7E84B8B4f39C507499c40B4ac199B050e2882d5</div></div>
-        <div class="ag-item"><div class="ag-lbl">WBTC (18 dec)</div><div class="fa" style="margin:0">0x0c64F03EEa5c30946D5c55B4b532D08ad74638a4</div></div>
-        <div class="ag-item"><div class="ag-lbl">WETH (18 dec)</div><div class="fa" style="margin:0">0x7d211F77525ea39A0592794f793cC1036eEaccD5</div></div>
-        <div class="ag-item"><div class="ag-lbl">WPHRS (18 dec)</div><div class="fa" style="margin:0">0x838800b758277CC111B2d48Ab01e5E164f8E9471</div></div>
+      <div class="fct">Endereços Oficiais dos Tokens · Pharos Atlantic Testnet</div>
+      <div class="ag" style="grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:10px;margin-top:10px">
+        <div class="ag-item">
+          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:4px">
+            <div class="ag-lbl">USDC (6 dec)</div>
+            <button class="copy-btn" onclick="copyAddr('0xcfC8330f4BCAB529c625D12781b1C19466A9Fc8B',this)">copy</button>
+          </div>
+          <div class="fa" style="margin:0;word-break:break-all">0xcfC8330f4BCAB529c625D12781b1C19466A9Fc8B</div>
+        </div>
+        <div class="ag-item">
+          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:4px">
+            <div class="ag-lbl">USDT (6 dec)</div>
+            <button class="copy-btn" onclick="copyAddr('0xE7E84B8B4f39C507499c40B4ac199B050e2882d5',this)">copy</button>
+          </div>
+          <div class="fa" style="margin:0;word-break:break-all">0xE7E84B8B4f39C507499c40B4ac199B050e2882d5</div>
+        </div>
+        <div class="ag-item">
+          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:4px">
+            <div class="ag-lbl">WBTC (18 dec)</div>
+            <button class="copy-btn" onclick="copyAddr('0x0c64F03EEa5c30946D5c55B4b532D08ad74638a4',this)">copy</button>
+          </div>
+          <div class="fa" style="margin:0;word-break:break-all">0x0c64F03EEa5c30946D5c55B4b532D08ad74638a4</div>
+        </div>
+        <div class="ag-item">
+          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:4px">
+            <div class="ag-lbl">WETH (18 dec)</div>
+            <button class="copy-btn" onclick="copyAddr('0x7d211F77525ea39A0592794f793cC1036eEaccD5',this)">copy</button>
+          </div>
+          <div class="fa" style="margin:0;word-break:break-all">0x7d211F77525ea39A0592794f793cC1036eEaccD5</div>
+        </div>
+        <div class="ag-item">
+          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:4px">
+            <div class="ag-lbl">WPHRS (18 dec)</div>
+            <button class="copy-btn" onclick="copyAddr('0x838800b758277CC111B2d48Ab01e5E164f8E9471',this)">copy</button>
+          </div>
+          <div class="fa" style="margin:0;word-break:break-all">0x838800b758277CC111B2d48Ab01e5E164f8E9471</div>
+        </div>
       </div>
     </div>
   </div>
@@ -927,17 +1028,19 @@ async function waitForReceipt(hash,maxMs=60000){
 }
 
 // ── RENDER ────────────────────────────────────────────────────
-function renderAll(){renderMarkets();renderDashboard();}
+function renderAll(){renderMarkets();renderDashboard();renderBalances();}
 
 function renderMarkets(){
   document.getElementById("mrows").innerHTML=MKT.map(mk=>{
     const u=mk.ts>0?mk.tb/mk.ts*100:0;
-    const tokLabel=mk.sym.length>4?mk.sym.slice(1):mk.sym; // WBTC→BTC etc for icon
+    const tokLabel=mk.sym.length>4?mk.sym.slice(1):mk.sym;
+    const walBal=bals[mk.sym]?Number(bals[mk.sym])/(10**mk.dec):0;
+    const walStr=connected&&walBal>0?` · Wallet: ${walBal.toFixed(mk.dec===6?2:4)}`:"";
     return`<div class="mcard ${mk.cls}">
       <div class="aico ${mk.cls}">${tokLabel}</div>
       <div class="minfo">
         <div class="masset">${mk.sym}</div>
-        <div class="mname">${mk.name}</div>
+        <div class="mname">${mk.name}${walStr}</div>
         <div class="mprice">$${mk.price.toLocaleString(undefined,{minimumFractionDigits:2,maximumFractionDigits:2})}</div>
       </div>
       <div class="mrates">
@@ -946,9 +1049,9 @@ function renderMarkets(){
         <div class="mrate-row"><span class="mrate-tag">LTV</span><span class="mrate-val" style="color:var(--t2)">${mk.ltv}%</span></div>
       </div>
       <div class="mutil">
-        <span class="util-lbl">$${mk.ts.toFixed(0)} supplied</span>
+        <div class="util-detail"><span>Supply $${mk.ts.toFixed(0)}</span><span>Borrow $${mk.tb.toFixed(0)}</span></div>
         <div class="util-bar"><div class="util-fill" style="width:${Math.min(u,100)}%"></div></div>
-        <span class="util-lbl">${u.toFixed(0)}% util</span>
+        <span class="util-lbl">${u.toFixed(1)}% utilization</span>
       </div>
       <div class="mbtns-row">
         <button class="ab s" onclick="openModal('supply','${mk.sym}')">Supply</button>
@@ -958,6 +1061,65 @@ function renderMarkets(){
       </div>
     </div>`;
   }).join("");
+}
+
+// ── WALLET BALANCES ───────────────────────────────────────────
+function renderBalances(){
+  // Update header PHRS pill
+  const phrs=bals["PHRS"]||0n;
+  const phrsAmt=Number(phrs)/1e18;
+  const pb=document.getElementById("phrsBal");
+  const pa=document.getElementById("phrsAmt");
+  if(pb&&pa){
+    pa.textContent=phrsAmt.toFixed(3);
+    if(connected)pb.classList.add("on"); else pb.classList.remove("on");
+  }
+
+  // Explorer link for wallet
+  const expLink=document.getElementById("expLink");
+  if(expLink&&wallet){
+    expLink.href=EXPLORER+"/address/"+wallet;
+    expLink.style.display="inline-flex";
+  }
+
+  // Balances grid
+  const grid=document.getElementById("balsGrid");
+  if(!grid)return;
+  if(!connected){grid.innerHTML='<div class="pe" style="grid-column:1/-1">Conecta a carteira para ver saldos</div>';return;}
+
+  let totalUsd=phrsAmt*1; // PHRS ~$1
+  const cards=[];
+
+  // Native PHRS card
+  cards.push(`<div class="bal-card">
+    <div class="bal-top">
+      <div class="aico wphrs" style="width:28px;height:28px;font-size:.48rem">PHRS</div>
+      <div><div class="bal-sym">PHRS</div><div class="bal-native">Nativo · 18 dec</div></div>
+    </div>
+    <div class="bal-amt">${phrsAmt.toFixed(4)}</div>
+    <div class="bal-usd">~$${phrsAmt.toFixed(2)}</div>
+  </div>`);
+
+  // ERC-20 tokens
+  MKT.forEach(mk=>{
+    const raw=bals[mk.sym]||0n;
+    const amt=Number(raw)/(10**mk.dec);
+    const usd=amt*mk.price;
+    totalUsd+=usd;
+    const dp=mk.dec===6?4:6;
+    cards.push(`<div class="bal-card">
+      <div class="bal-top">
+        <div class="aico ${mk.cls}" style="width:28px;height:28px;font-size:.48rem">${mk.sym.length>4?mk.sym.slice(1):mk.sym}</div>
+        <div><div class="bal-sym">${mk.sym}</div><div class="bal-native">ERC-20 · ${mk.dec} dec</div></div>
+      </div>
+      <div class="bal-amt">${amt.toFixed(dp)}</div>
+      <div class="bal-usd">$${usd.toFixed(2)}</div>
+    </div>`);
+  });
+
+  grid.innerHTML=cards.join("");
+  const tw=document.getElementById("totalWalletUsd");
+  if(tw)tw.textContent="$"+totalUsd.toFixed(2);
 }
 
 function renderDashboard(){
@@ -1033,6 +1195,12 @@ function toast(msg,t){
 }
 const cap=s=>s.charAt(0).toUpperCase()+s.slice(1);
 const sleep=ms=>new Promise(r=>setTimeout(r,ms));
+function copyAddr(addr,btn){
+  navigator.clipboard.writeText(addr).then(()=>{
+    btn.textContent="✓";btn.classList.add("copied");
+    setTimeout(()=>{btn.textContent="copy";btn.classList.remove("copied");},2000);
+  }).catch(()=>toast("Copia manualmente: "+addr,"inf"));
+}
 
 document.getElementById("ov").addEventListener("click",e=>{if(e.target===document.getElementById("ov"))closeModal();});
 
