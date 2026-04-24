@@ -255,6 +255,30 @@ footer{text-align:center;padding:24px;border-top:1px solid var(--b0);font-family
   .modal{width:98%;border-radius:var(--rad-lg);}.mbtns{grid-template-columns:1fr;}
   .mb{padding:14px;}.hftop{flex-direction:column;gap:12px;}.hfmeta{text-align:left;}
 }
+
+/* ── WALLET PICKER ── */
+.wp-ov{position:fixed;inset:0;background:rgba(0,0,0,.7);backdrop-filter:blur(8px);
+  z-index:300;display:none;align-items:center;justify-content:center;}
+.wp-ov.on{display:flex;}
+.wp-modal{background:var(--s1);border:1px solid var(--b1);border-radius:var(--rad-xl);
+  padding:28px;width:320px;max-width:94vw;}
+.wp-title{font-family:'Syne',sans-serif;font-size:1.1rem;font-weight:700;
+  color:var(--t);margin-bottom:4px;}
+.wp-sub{font-size:.78rem;color:var(--t2);margin-bottom:18px;}
+#wp-list{display:flex;flex-direction:column;gap:10px;margin-bottom:16px;}
+.wp-btn{display:flex;align-items:center;gap:14px;background:var(--s0);
+  border:1px solid var(--b1);border-radius:var(--rad);padding:14px 16px;
+  cursor:pointer;color:var(--t);font-size:.95rem;font-weight:600;
+  font-family:'IBM Plex Sans',sans-serif;transition:all .15s;text-align:left;}
+.wp-btn:hover{border-color:var(--te);background:var(--s2);}
+.wp-ico{width:36px;height:36px;border-radius:10px;background:var(--b1);
+  display:flex;align-items:center;justify-content:center;font-size:.8rem;
+  color:var(--t2);flex-shrink:0;}
+.wp-ico img{width:36px;height:36px;border-radius:10px;object-fit:cover;}
+.wp-cancel{width:100%;background:none;border:1px solid var(--b0);border-radius:var(--rad);
+  color:var(--t2);padding:9px;cursor:pointer;font-size:.82rem;
+  font-family:'IBM Plex Sans',sans-serif;transition:all .15s;}
+.wp-cancel:hover{border-color:var(--b2);color:var(--t);}
 </style>
 </head>
 <body>
@@ -471,6 +495,16 @@ footer{text-align:center;padding:24px;border-top:1px solid var(--b0);font-family
 
 <div class="toast" id="toast"></div>
 
+<!-- WALLET PICKER -->
+<div class="wp-ov" id="wpov" onclick="if(event.target===this)this.classList.remove('on')">
+  <div class="wp-modal">
+    <div class="wp-title">Choose your wallet</div>
+    <div class="wp-sub">Multiple wallets detected</div>
+    <div id="wp-list"></div>
+    <button class="wp-cancel" onclick="document.getElementById('wpov').classList.remove('on')">Cancel</button>
+  </div>
+</div>
+
 <footer>
   PharosLend v2 · Pharos Testnet · Chain ID 688688 · 5 assets<br>
   USDC · USDT · WBTC · WETH · WPHRS<br>
@@ -523,29 +557,68 @@ let mode="supply", sym="USDC";
 let approvedAmt=0;
 let refreshTimer=null;
 
-// ── PROVIDER (handles MetaMask, Rabby, OKX, any EIP-1193) ────
-function getProvider(){
-  if(!window.ethereum) return null;
-  if(window.ethereum.providers?.length){
-    // Multiple wallets installed — prefer whichever is active/last injected
-    return window.ethereum.providers.find(p=>p.isRabby)
-        || window.ethereum.providers.find(p=>p.isMetaMask)
-        || window.ethereum.providers[0];
-  }
-  return window.ethereum;
+// ── WALLET DISCOVERY (EIP-6963 + legacy fallback) ─────────────
+const _eip6963 = [];   // wallets announced via EIP-6963
+let _selectedProvider = null;
+
+window.addEventListener("eip6963:announceProvider", e => {
+  if(!_eip6963.find(w=>w.info.uuid===e.detail.info.uuid))
+    _eip6963.push(e.detail);  // {info:{name,icon,uuid,rdns}, provider}
+});
+
+function _legacyWallets(){
+  const out=[];
+  if(!window.ethereum) return out;
+  const provs=window.ethereum.providers?.length ? window.ethereum.providers : [window.ethereum];
+  provs.forEach(p=>{
+    const name=p.isRabby?"Rabby":p.isMetaMask?"MetaMask":p.isBraveWallet?"Brave":p.isOKExWallet||p.isOKX?"OKX":"Wallet";
+    out.push({info:{name,icon:"",uuid:name},provider:p});
+  });
+  return out;
 }
 
-// ── WALLET ────────────────────────────────────────────────────
+function getProvider(){ return _selectedProvider || window.ethereum || null; }
+
+// ── CONNECT ───────────────────────────────────────────────────
 async function connectWallet(){
+  if(connected) return;
+  // Wait briefly for EIP-6963 announcements
+  await new Promise(r=>setTimeout(r,120));
+  const all = _eip6963.length ? _eip6963 : _legacyWallets();
+  console.log("Wallets found:", all.map(w=>w.info.name));
+  if(!all.length){ toast("No wallet detected — install MetaMask or Rabby","err"); return; }
+  if(all.length===1){ _selectedProvider=all[0].provider; await _doConnect(); return; }
+  // Multiple wallets → show picker
+  const list=document.getElementById("wp-list");
+  list.innerHTML=all.map((w,i)=>`
+    <button class="wp-btn" onclick="pickWallet(${i})">
+      ${w.info.icon
+        ? `<div class="wp-ico"><img src="${w.info.icon}"></div>`
+        : `<div class="wp-ico">${w.info.name.slice(0,2).toUpperCase()}</div>`}
+      <span>${w.info.name}</span>
+    </button>`).join("");
+  window._wpAll=all;
+  document.getElementById("wpov").classList.add("on");
+}
+
+async function pickWallet(i){
+  document.getElementById("wpov").classList.remove("on");
+  _selectedProvider=window._wpAll[i].provider;
+  await _doConnect();
+}
+
+async function _doConnect(){
   const eth=getProvider();
-  if(!eth){toast("MetaMask / Rabby not detected!","err");return;}
-  if(connected)return;
+  if(!eth){toast("Wallet not available","err");return;}
   try{
     toast("Connecting…","inf");
     const accs=await eth.request({method:"eth_requestAccounts"});
+    if(!accs||!accs.length){toast("No account returned","err");return;}
     wallet=accs[0];
+    console.log("Connected wallet:",wallet);
     const cid=parseInt(await eth.request({method:"eth_chainId"}),16);
-    if(cid!==CHAIN_ID) await addPharosNet();
+    console.log("Chain ID:",cid,"(expected:",CHAIN_ID,")");
+    if(cid!==CHAIN_ID){ await addPharosNet(); }
     connected=true;
     const btn=document.getElementById("wbtn");
     btn.textContent=wallet.slice(0,6)+"…"+wallet.slice(-4);
@@ -553,7 +626,10 @@ async function connectWallet(){
     await loadAll(); renderAll();
     toast("✓ Connected: "+wallet.slice(0,6)+"…"+wallet.slice(-4),"ok");
     startAutoRefresh();
-  }catch(e){toast("Error: "+e.message,"err");}
+  }catch(e){
+    console.error("Connect error:",e);
+    toast("Error: "+e.message,"err");
+  }
 }
 
 async function addPharosNet(){
@@ -614,9 +690,19 @@ async function loadAll(){
 
 async function loadBals(){
   if(!wallet)return;
+  // Native PHRS balance via direct RPC
+  try{
+    const res=await fetch(RPC_URL,{method:"POST",headers:{"Content-Type":"application/json"},
+      body:JSON.stringify({jsonrpc:"2.0",id:++_rpcId,method:"eth_getBalance",params:[wallet,"latest"]})});
+    const j=await res.json();
+    if(j.result) bals["PHRS"]=BigInt(j.result);
+    console.log("Native PHRS balance (wei):", j.result);
+  }catch(e){console.warn("getBalance error:",e);}
+  // ERC-20 balances
   for(const m of MKT){
     const r=await ethCall(m.addr, SEL.balanceOf+pad(wallet));
     bals[m.sym]=r?BigInt(r):0n;
+    console.log(m.sym,"balance raw:",r,"=",r?Number(BigInt(r))/(10**m.dec):0);
   }
 }
 
@@ -943,15 +1029,24 @@ const cap=s=>s.charAt(0).toUpperCase()+s.slice(1);
 const sleep=ms=>new Promise(r=>setTimeout(r,ms));
 
 document.getElementById("ov").addEventListener("click",e=>{if(e.target===document.getElementById("ov"))closeModal();});
-const _eth=getProvider();
-if(_eth){
-  _eth.on("accountsChanged",a=>{
-    if(!a.length){connected=false;wallet=null;clearInterval(refreshTimer);
-      const b=document.getElementById("wbtn");b.textContent="Connect Wallet";b.classList.remove("on");
-    }else{wallet=a[0];loadAll().then(renderAll);}
-  });
-  _eth.on("chainChanged",()=>location.reload());
+
+// Request EIP-6963 wallet announcements immediately
+window.dispatchEvent(new Event("eip6963:requestProvider"));
+
+// Watch for wallet events (accounts / chain change)
+function _watchProvider(eth){
+  if(!eth||!eth.on)return;
+  try{
+    eth.on("accountsChanged",a=>{
+      if(!a.length){connected=false;wallet=null;_selectedProvider=null;clearInterval(refreshTimer);
+        const b=document.getElementById("wbtn");b.textContent="Connect Wallet";b.classList.remove("on");
+      }else{wallet=a[0];loadAll().then(renderAll);}
+    });
+    eth.on("chainChanged",()=>location.reload());
+  }catch(e){console.warn("Provider event error:",e);}
 }
+if(window.ethereum) _watchProvider(window.ethereum);
+
 // Load market data immediately on page load (no wallet needed — direct RPC)
 loadContract().then(renderAll);
 </script>
