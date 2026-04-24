@@ -523,11 +523,15 @@ let mode="supply", sym="USDC";
 let approvedAmt=0;
 let refreshTimer=null;
 
-// ── PROVIDER (handles multiple wallets) ───────────────────────
+// ── PROVIDER (handles MetaMask, Rabby, OKX, any EIP-1193) ────
 function getProvider(){
   if(!window.ethereum) return null;
-  if(window.ethereum.providers?.length)
-    return window.ethereum.providers.find(p=>p.isMetaMask)||window.ethereum.providers[0];
+  if(window.ethereum.providers?.length){
+    // Multiple wallets installed — prefer whichever is active/last injected
+    return window.ethereum.providers.find(p=>p.isRabby)
+        || window.ethereum.providers.find(p=>p.isMetaMask)
+        || window.ethereum.providers[0];
+  }
   return window.ethereum;
 }
 
@@ -580,9 +584,22 @@ function startAutoRefresh(){
 // ── HELPERS ───────────────────────────────────────────────────
 function pad(v,len=64){return v.replace("0x","").padStart(len,"0");}
 function readU256(hex,slot){return BigInt("0x"+hex.slice(2+slot*64, 2+slot*64+64));}
+
+// Read-only calls go DIRECTLY to the RPC — never through the wallet.
+// This means: balances load regardless of which wallet is installed,
+// whether Rabby or MetaMask is active, or even before connecting.
+let _rpcId=0;
 async function ethCall(to,data){
-  const eth=getProvider();if(!eth)return null;
-  try{return await eth.request({method:"eth_call",params:[{to,data},"latest"]});}catch{return null;}
+  try{
+    const res=await fetch(RPC_URL,{
+      method:"POST",
+      headers:{"Content-Type":"application/json"},
+      body:JSON.stringify({jsonrpc:"2.0",id:++_rpcId,method:"eth_call",params:[{to,data},"latest"]})
+    });
+    const j=await res.json();
+    if(j.error){console.warn("eth_call error:",j.error.message);return null;}
+    return j.result;
+  }catch(e){console.warn("RPC fetch error:",e.message);return null;}
 }
 function fmt(amount,dec,dp=4){
   const n=Number(amount)/(10**dec);
@@ -604,17 +621,9 @@ async function loadBals(){
 }
 
 async function loadContract(){
-  if(!wallet||CONTRACT.includes("YOUR"))return;
-  // getPosition
-  const rp=await ethCall(CONTRACT, SEL.getPosition+pad(wallet));
-  if(rp&&rp.length>10){
-    pos.colUsd = readU256(rp,0);
-    pos.debtUsd= readU256(rp,1);
-    const hfRaw= readU256(rp,2);
-    pos.hf     = hfRaw===BigInt("0x"+("f".repeat(64)))?Infinity:Number(hfRaw)/10000;
-    pos.avail  = readU256(rp,3);
-  }
-  // getStats
+  if(CONTRACT.includes("YOUR"))return;
+
+  // ── getStats (no wallet needed) ──────────────────────────────
   const rs=await ethCall(CONTRACT, SEL.getStats);
   if(rs&&rs.length>10){
     document.getElementById("kTX").textContent=Number(readU256(rs,2));
@@ -623,7 +632,33 @@ async function loadContract(){
     document.getElementById("kB").textContent=fmtUsd(tbu);
     document.getElementById("kU").textContent=(Number(util)/100).toFixed(1)+"%";
   }
-  // per-token positions + market data
+
+  // ── per-token market data (no wallet needed) ─────────────────
+  for(const m of MKT){
+    const rmd=await ethCall(CONTRACT, SEL.getMarketData+pad(m.addr));
+    if(rmd&&rmd.length>10){
+      m.ts  =Number(readU256(rmd,2))/1e6;
+      m.tb  =Number(readU256(rmd,3))/1e6;
+      m.liq =readU256(rmd,4);
+      m.price=Number(readU256(rmd,7))/1e6;
+      m.apy =Number(readU256(rmd,5))/100;
+      m.apr =Number(readU256(rmd,6))/100;
+      m.ltv =Number(readU256(rmd,8))/100;
+    }
+  }
+
+  // ── wallet-specific data (only when connected) ───────────────
+  if(!wallet)return;
+
+  const rp=await ethCall(CONTRACT, SEL.getPosition+pad(wallet));
+  if(rp&&rp.length>10){
+    pos.colUsd = readU256(rp,0);
+    pos.debtUsd= readU256(rp,1);
+    const hfRaw= readU256(rp,2);
+    pos.hf     = hfRaw===BigInt("0x"+("f".repeat(64)))?Infinity:Number(hfRaw)/10000;
+    pos.avail  = readU256(rp,3);
+  }
+
   for(const m of MKT){
     const rtd=await ethCall(CONTRACT, SEL.getTokenPos+pad(wallet)+pad(m.addr));
     if(rtd&&rtd.length>10){
@@ -631,16 +666,6 @@ async function loadContract(){
         sAmt:readU256(rtd,0), bAmt:readU256(rtd,1),
         sUsd:readU256(rtd,2), bUsd:readU256(rtd,3)
       };
-    }
-    const rmd=await ethCall(CONTRACT, SEL.getMarketData+pad(m.addr));
-    if(rmd&&rmd.length>10){
-      m.ts  =Number(readU256(rmd,2))/1e6; // USD
-      m.tb  =Number(readU256(rmd,3))/1e6;
-      m.liq =readU256(rmd,4);
-      m.price=Number(readU256(rmd,7))/1e6;
-      m.apy =Number(readU256(rmd,5))/100;
-      m.apr =Number(readU256(rmd,6))/100;
-      m.ltv =Number(readU256(rmd,8))/100;
     }
   }
 }
@@ -927,7 +952,8 @@ if(_eth){
   });
   _eth.on("chainChanged",()=>location.reload());
 }
-renderAll();
+// Load market data immediately on page load (no wallet needed — direct RPC)
+loadContract().then(renderAll);
 </script>
 </body>
 </html>
