@@ -293,13 +293,13 @@ footer{text-align:center;padding:24px;border-top:1px solid var(--b0);font-family
     <button class="nb"    onclick="goPage('faucet',this)">Faucet</button>
   </nav>
   <div class="br">
-    <div class="npill"><div class="ndot"></div>Pharos Testnet · 688688</div>
+    <div class="npill"><div class="ndot"></div>Pharos Atlantic · 688689</div>
     <button class="wbtn" id="wbtn" onclick="connectWallet()">Connect Wallet</button>
   </div>
 </header>
 
 <div class="banner" onclick="window.open('https://testnet.pharosscan.xyz/address/'+CONTRACT,'_blank')">
-  PharosLend v2 live on Pharos Testnet · 5 assets: USDC · USDT · WBTC · WETH · WPHRS · View on explorer ↗
+  PharosLend v2 live on Pharos Atlantic Testnet · 5 assets: USDC · USDT · WBTC · WETH · WPHRS · View on explorer ↗
 </div>
 
 <main class="main">
@@ -506,7 +506,7 @@ footer{text-align:center;padding:24px;border-top:1px solid var(--b0);font-family
 </div>
 
 <footer>
-  PharosLend v2 · Pharos Testnet · Chain ID 688688 · 5 assets<br>
+  PharosLend v2 · Pharos Atlantic Testnet · Chain ID 688689 · 5 assets<br>
   USDC · USDT · WBTC · WETH · WPHRS<br>
   ⚠ Testnet only — no real funds
 </footer>
@@ -516,10 +516,10 @@ footer{text-align:center;padding:24px;border-top:1px solid var(--b0);font-family
 //  PharosLend v2 — Pharos Testnet (Chain ID 688688)
 //  Paste your deployed contract address below after Remix deploy.
 // ═══════════════════════════════════════════════════════════════
-const CONTRACT  = "0x4Df438F5f6C085463b9bDff13E4f6554BB29C850";
-const CHAIN_ID  = 688688;
-const EXPLORER  = "https://testnet.pharosscan.xyz";
-const RPC_URL   = "https://testnet.dplabs-internal.com";
+const CONTRACT  = "0xYOUR_ATLANTIC_CONTRACT"; // ← redeploy on Atlantic (chain 688689), paste address here
+const CHAIN_ID  = 688689;  // Pharos Atlantic Testnet
+const EXPLORER  = "https://atlantic.pharosscan.xyz";
+const RPC_URL   = "https://atlantic.dplabs-internal.com";
 
 document.getElementById("contractAddr").textContent = CONTRACT;
 
@@ -661,14 +661,21 @@ function startAutoRefresh(){
 function pad(v,len=64){return v.replace("0x","").padStart(len,"0");}
 function readU256(hex,slot){return BigInt("0x"+hex.slice(2+slot*64, 2+slot*64+64));}
 
-// Read-only calls go DIRECTLY to the RPC — never through the wallet.
-// This means: balances load regardless of which wallet is installed,
-// whether Rabby or MetaMask is active, or even before connecting.
+// eth_call goes through the wallet provider — it handles CORS and uses
+// the correct chain RPC automatically. No direct browser→RPC fetch needed.
+// eth_call is read-only and works even before the user approves the site.
 let _rpcId=0;
 async function ethCall(to,data){
+  // Prefer selected provider, fall back to window.ethereum
+  const eth=_selectedProvider||window.ethereum||null;
+  if(eth){
+    try{
+      return await eth.request({method:"eth_call",params:[{to,data},"latest"]});
+    }catch(e){console.warn("eth_call via wallet failed:",e.message);}
+  }
+  // Last-resort: direct RPC (likely blocked by CORS in browser, for debug only)
   try{
-    const res=await fetch(RPC_URL,{
-      method:"POST",
+    const res=await fetch(RPC_URL,{method:"POST",
       headers:{"Content-Type":"application/json"},
       body:JSON.stringify({jsonrpc:"2.0",id:++_rpcId,method:"eth_call",params:[{to,data},"latest"]})
     });
@@ -690,13 +697,12 @@ async function loadAll(){
 
 async function loadBals(){
   if(!wallet)return;
-  // Native PHRS balance via direct RPC
+  // Native PHRS balance via wallet provider
   try{
-    const res=await fetch(RPC_URL,{method:"POST",headers:{"Content-Type":"application/json"},
-      body:JSON.stringify({jsonrpc:"2.0",id:++_rpcId,method:"eth_getBalance",params:[wallet,"latest"]})});
-    const j=await res.json();
-    if(j.result) bals["PHRS"]=BigInt(j.result);
-    console.log("Native PHRS balance (wei):", j.result);
+    const eth=_selectedProvider||window.ethereum;
+    const r=await eth.request({method:"eth_getBalance",params:[wallet,"latest"]});
+    if(r) bals["PHRS"]=BigInt(r);
+    console.log("Native PHRS (wei):",r,"=",(Number(BigInt(r||"0x0"))/1e18).toFixed(4),"PHRS");
   }catch(e){console.warn("getBalance error:",e);}
   // ERC-20 balances
   for(const m of MKT){
