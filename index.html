@@ -23,7 +23,6 @@
 body{background:var(--bg);color:var(--t);font-family:'IBM Plex Sans',sans-serif;min-height:100vh;
   background-image:radial-gradient(ellipse 70% 50% at 15% -5%,rgba(13,148,136,.07) 0%,transparent 55%),
   radial-gradient(ellipse 50% 40% at 85% 105%,rgba(16,185,129,.05) 0%,transparent 55%);}
-
 /* ── TOPBAR ── */
 .bar{position:sticky;top:0;z-index:100;background:rgba(3,15,15,.9);backdrop-filter:blur(20px);
   border-bottom:1px solid var(--b0);height:60px;padding:0 24px;
@@ -50,7 +49,6 @@ body{background:var(--bg);color:var(--t);font-family:'IBM Plex Sans',sans-serif;
   transition:all .2s;box-shadow:0 0 12px rgba(13,148,136,.3);}
 .wbtn:hover{box-shadow:0 0 22px rgba(13,148,136,.5);transform:translateY(-1px);}
 .wbtn.on{background:var(--s1);color:var(--t2);border:1px solid var(--b1);box-shadow:none;transform:none;}
-
 /* ── BANNER ── */
 .banner{margin:14px 24px 0;border-radius:var(--rad);padding:9px 16px;display:flex;align-items:center;gap:8px;
   font-family:'IBM Plex Mono',monospace;font-size:.67rem;
@@ -58,7 +56,6 @@ body{background:var(--bg);color:var(--t);font-family:'IBM Plex Sans',sans-serif;
   cursor:pointer;transition:all .15s;}
 .banner:hover{background:linear-gradient(90deg,var(--g3),transparent);border-color:rgba(16,185,129,.35);}
 .banner::before{content:"●";font-size:.5rem;animation:pulse 2s infinite;}
-
 /* ── LAYOUT ── */
 .main{max-width:1160px;margin:0 auto;padding:24px;}
 .page{display:none;animation:fi .2s ease;}
@@ -67,7 +64,6 @@ body{background:var(--bg);color:var(--t);font-family:'IBM Plex Sans',sans-serif;
 .ph{margin-bottom:22px;}
 .ph h1{font-family:'Syne',sans-serif;font-size:1.6rem;font-weight:800;letter-spacing:-.04em;line-height:1.15;}
 .ph p{font-size:.78rem;color:var(--t2);margin-top:4px;line-height:1.6;}
-
 /* ── KPI STRIP ── */
 .kpis{display:flex;gap:10px;margin-top:16px;}
 .kpi{background:var(--s0);border:1px solid var(--b0);border-radius:var(--rad);padding:13px 16px;flex:1;position:relative;overflow:hidden;}
@@ -75,7 +71,6 @@ body{background:var(--bg);color:var(--t);font-family:'IBM Plex Sans',sans-serif;
 .kl{font-family:'IBM Plex Mono',monospace;font-size:.58rem;text-transform:uppercase;letter-spacing:.1em;color:var(--t3);margin-bottom:5px;}
 .kv{font-family:'IBM Plex Mono',monospace;font-size:1.18rem;font-weight:600;}
 .kv.g{color:var(--g);}.kv.b{color:var(--arc2);}.kv.y{color:var(--y);}
-
 /* ── MARKET CARDS ── */
 .mlist{display:flex;flex-direction:column;gap:10px;margin-bottom:22px;}
 .mcard{background:var(--s0);border:1px solid var(--b0);border-radius:var(--rad-lg);padding:18px 20px;
@@ -89,7 +84,6 @@ body{background:var(--bg);color:var(--t);font-family:'IBM Plex Sans',sans-serif;
 .mcard.wbtc::before{background:linear-gradient(90deg,var(--o),transparent);}
 .mcard.weth::before{background:linear-gradient(90deg,var(--pu),transparent);}
 .mcard.wphrs::before{background:linear-gradient(90deg,var(--g),transparent);}
-
 .aico{width:42px;height:42px;border-radius:50%;flex-shrink:0;display:flex;align-items:center;justify-content:center;
   font-family:'IBM Plex Mono',monospace;font-size:.58rem;font-weight:700;letter-spacing:.02em;}
 .aico.usdc{background:linear-gradient(135deg,rgba(59,130,246,.2),rgba(59,130,246,.05));border:1px solid rgba(59,130,246,.2);color:var(--arc2);}
@@ -97,36 +91,30 @@ body{background:var(--bg);color:var(--t);font-family:'IBM Plex Sans',sans-serif;
 .aico.wbtc{background:linear-gradient(135deg,rgba(249,115,22,.2),rgba(249,115,22,.05));border:1px solid rgba(249,115,22,.2);color:var(--o);}
 .aico.weth{background:linear-gradient(135deg,rgba(168,85,247,.2),rgba(168,85,247,.05));border:1px solid rgba(168,85,247,.2);color:var(--pu);}
 .aico.wphrs{background:linear-gradient(135deg,rgba(16,185,129,.2),rgba(16,185,129,.05));border:1px solid rgba(16,185,129,.2);color:var(--g);}
-
 .minfo{}.masset{font-weight:600;font-size:.9rem;}.mname{font-size:.7rem;color:var(--t2);margin-top:2px;}
 .mprice{font-family:'IBM Plex Mono',monospace;font-size:.67rem;color:var(--t3);margin-top:3px;}
-
 .mrates{display:flex;flex-direction:column;gap:5px;align-items:flex-end;}
 .mrate-row{display:flex;align-items:center;gap:7px;}
 .mrate-tag{font-family:'IBM Plex Mono',monospace;font-size:.58rem;text-transform:uppercase;letter-spacing:.07em;
   color:var(--t3);background:var(--s1);border:1px solid var(--b0);padding:2px 6px;border-radius:4px;}
 .mrate-val{font-family:'IBM Plex Mono',monospace;font-size:.88rem;font-weight:600;}
 .mrate-val.g{color:var(--g);}.mrate-val.b{color:var(--arc2);}
-
 .mutil{display:flex;flex-direction:column;align-items:flex-end;gap:4px;}
 .util-lbl{font-family:'IBM Plex Mono',monospace;font-size:.58rem;color:var(--t3);}
 .util-bar{width:60px;height:4px;background:var(--b0);border-radius:3px;overflow:hidden;}
 .util-fill{height:100%;border-radius:3px;background:linear-gradient(90deg,var(--te),var(--g));transition:width .4s;}
-
 .mbtns-row{display:flex;gap:7px;grid-column:2/-1;margin-top:12px;padding-top:14px;border-top:1px solid var(--b0);}
 .ab{padding:8px 18px;border:none;border-radius:7px;cursor:pointer;font-family:'IBM Plex Sans',sans-serif;font-weight:600;font-size:.78rem;transition:all .15s;}
 .ab.s{background:var(--arc3);color:var(--arc2);border:1px solid var(--arc4);}
 .ab.s:hover{background:var(--arc4);transform:translateY(-1px);}
 .ab.b{background:var(--g2);color:var(--g);border:1px solid var(--g3);}
 .ab.b:hover{background:rgba(16,185,129,.2);transform:translateY(-1px);}
-
 /* ── DASHBOARD ── */
 .sg{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:16px;}
 .sc{background:var(--s0);border:1px solid var(--b0);border-radius:var(--rad);padding:14px 16px;}
 .sl{font-family:'IBM Plex Mono',monospace;font-size:.58rem;text-transform:uppercase;letter-spacing:.1em;color:var(--t3);margin-bottom:5px;}
 .sv{font-family:'IBM Plex Mono',monospace;font-size:1.12rem;font-weight:600;}
 .sv.g{color:var(--g);}.sv.r{color:var(--r);}.sv.b{color:var(--arc2);}
-
 /* ── HEALTH FACTOR ── */
 .hfc{background:var(--s0);border:1px solid var(--b0);border-radius:var(--rad-lg);padding:20px;margin-bottom:18px;}
 .hftop{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:16px;}
@@ -145,7 +133,6 @@ body{background:var(--bg);color:var(--t);font-family:'IBM Plex Sans',sans-serif;
 .hfbar-fill{position:absolute;top:0;left:0;height:7px;border-radius:4px;background:linear-gradient(90deg,var(--r) 0%,var(--y) 40%,var(--g) 75%);transition:width .5s ease;}
 .hfbar-needle{position:absolute;top:-3px;width:2px;height:13px;background:#fff;border-radius:2px;box-shadow:0 0 6px rgba(255,255,255,.5);transition:left .5s ease;}
 .hfsc{display:flex;justify-content:space-between;font-family:'IBM Plex Mono',monospace;font-size:.57rem;color:var(--t3);margin-top:5px;}
-
 /* ── POSITIONS ── */
 .dg{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:20px;}
 .dc{background:var(--s0);border:1px solid var(--b0);border-radius:var(--rad-lg);overflow:hidden;}
@@ -161,7 +148,6 @@ body{background:var(--bg);color:var(--t);font-family:'IBM Plex Sans',sans-serif;
 .pamt{font-family:'IBM Plex Mono',monospace;font-size:.83rem;font-weight:600;}
 .pusd{font-size:.66rem;color:var(--t3);text-align:right;margin-top:1px;}
 .pe{padding:24px 16px;text-align:center;font-size:.77rem;color:var(--t3);line-height:1.8;}
-
 /* ── FAUCET ── */
 .fg{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:16px;}
 .fc{background:var(--s0);border:1px solid var(--b0);border-radius:var(--rad-lg);padding:18px;}
@@ -176,7 +162,6 @@ body{background:var(--bg);color:var(--t);font-family:'IBM Plex Sans',sans-serif;
 .fa{font-family:'IBM Plex Mono',monospace;font-size:.58rem;color:var(--t3);word-break:break-all;margin-top:7px;line-height:1.6;}
 .ag{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin-top:12px;}
 .ag-item .ag-lbl{font-family:'IBM Plex Mono',monospace;font-size:.57rem;color:var(--t3);margin-bottom:3px;}
-
 /* ── MODAL ── */
 .ov{display:none;position:fixed;inset:0;z-index:200;background:rgba(1,8,8,.88);backdrop-filter:blur(14px);align-items:center;justify-content:center;}
 .ov.on{display:flex;}
@@ -231,7 +216,6 @@ body{background:var(--bg);color:var(--t);font-family:'IBM Plex Sans',sans-serif;
 .txst{display:none;background:var(--s0);border:1px solid var(--b0);border-radius:8px;padding:12px;margin-top:10px;font-family:'IBM Plex Mono',monospace;font-size:.63rem;color:var(--t2);text-align:center;line-height:1.8;}
 .txst.on{display:block;}
 .txlnk{color:#2dd4bf;cursor:pointer;}.txlnk:hover{text-decoration:underline;}
-
 /* ── TOAST ── */
 .toast{position:fixed;bottom:20px;right:20px;z-index:400;background:var(--s1);border:1px solid var(--b1);border-radius:var(--rad);padding:12px 17px;font-size:.74rem;max-width:310px;display:none;font-family:'IBM Plex Mono',monospace;box-shadow:0 10px 40px rgba(0,0,0,.5);line-height:1.5;}
 .toast.on{display:block;animation:ts .2s ease;}
@@ -239,12 +223,20 @@ body{background:var(--bg);color:var(--t);font-family:'IBM Plex Sans',sans-serif;
 .toast.ok{border-color:rgba(16,185,129,.3);color:var(--g);}
 .toast.err{border-color:rgba(244,63,94,.3);color:var(--r);}
 .toast.inf{border-color:rgba(13,148,136,.3);color:#2dd4bf;}
-
 footer{text-align:center;padding:24px;border-top:1px solid var(--b0);font-family:'IBM Plex Mono',monospace;font-size:.58rem;color:var(--t3);line-height:2;}
-
+/* ── MOBILE — header em 2 linhas para tudo ser visível ── */
 @media(max-width:640px){
-  .bar{padding:0 14px;}.ltag{display:none;}.nb{padding:5px 10px;font-size:.76rem;}
-  .npill{display:none;}.main{padding:14px;}
+  .bar{height:auto;flex-wrap:wrap;padding:8px 14px;gap:0;row-gap:0;}
+  .logo{flex:1;min-width:0;}
+  .ltag{display:none;}
+  .nav{order:3;width:100%;justify-content:center;padding:6px 0 4px;
+    border-top:1px solid var(--b0);margin-top:6px;gap:4px;}
+  .nb{padding:5px 11px;font-size:.78rem;}
+  .br{gap:6px;}
+  .npill{display:none;}
+  .phrs-bal{display:none!important;}
+  .wbtn{font-size:.78rem;padding:6px 13px;}
+  .main{padding:14px;}
   .kpis{flex-wrap:wrap;}.kpi{min-width:calc(50% - 5px);}
   .mcard{grid-template-columns:auto 1fr;grid-template-rows:auto auto;}
   .mrates{grid-column:2;grid-row:1;flex-direction:row;gap:12px;align-items:center;justify-content:flex-end;}
@@ -255,14 +247,12 @@ footer{text-align:center;padding:24px;border-top:1px solid var(--b0);font-family
   .modal{width:98%;border-radius:var(--rad-lg);}.mbtns{grid-template-columns:1fr;}
   .mb{padding:14px;}.hftop{flex-direction:column;gap:12px;}.hfmeta{text-align:left;}
 }
-
 /* ── PHRS HEADER BALANCE ── */
 .phrs-bal{font-family:'IBM Plex Mono',monospace;font-size:.68rem;color:var(--g);
   background:var(--g2);border:1px solid var(--g3);border-radius:20px;
   padding:4px 11px;display:none;align-items:center;gap:5px;white-space:nowrap;cursor:pointer;}
 .phrs-bal.on{display:flex;}
 .phrs-bal:hover{background:var(--g3);}
-
 /* ── WALLET BALANCES PANEL ── */
 .bals-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:12px;}
 @media(max-width:700px){.bals-grid{grid-template-columns:repeat(2,1fr);}}
@@ -274,24 +264,20 @@ footer{text-align:center;padding:24px;border-top:1px solid var(--b0);font-family
 .bal-amt{font-size:1.05rem;font-weight:700;color:var(--t);margin:2px 0;}
 .bal-usd{font-size:.72rem;color:var(--t2);}
 .bal-native{font-size:.6rem;color:var(--g);margin-top:2px;}
-
 /* ── MARKET CARD IMPROVEMENTS ── */
 .util-detail{display:flex;justify-content:space-between;font-size:.63rem;color:var(--t2);
   margin-bottom:4px;font-family:'IBM Plex Mono',monospace;}
-
 /* ── COPY BUTTON ── */
 .copy-btn{background:none;border:1px solid var(--b1);border-radius:5px;
   color:var(--t2);padding:2px 7px;cursor:pointer;font-size:.6rem;
   font-family:'IBM Plex Mono',monospace;transition:all .15s;flex-shrink:0;}
 .copy-btn:hover{border-color:var(--te);color:var(--te);}
 .copy-btn.copied{border-color:var(--g);color:var(--g);}
-
 /* ── EXPLORER LINK ── */
 .exp-link{display:inline-flex;align-items:center;gap:5px;font-family:'IBM Plex Mono',monospace;
   font-size:.65rem;color:var(--t2);text-decoration:none;border:1px solid var(--b1);
   border-radius:6px;padding:3px 9px;transition:all .15s;}
 .exp-link:hover{border-color:var(--te);color:var(--te);}
-
 /* ── WALLET PICKER ── */
 .wp-ov{position:fixed;inset:0;background:rgba(0,0,0,.7);backdrop-filter:blur(8px);
   z-index:300;display:none;align-items:center;justify-content:center;}
@@ -318,7 +304,6 @@ footer{text-align:center;padding:24px;border-top:1px solid var(--b0);font-family
 </style>
 </head>
 <body>
-
 <header class="bar">
   <a class="logo" href="#">
     <div class="lm">PL</div>PharosLend<span class="ltag">testnet v2</span>
@@ -336,13 +321,10 @@ footer{text-align:center;padding:24px;border-top:1px solid var(--b0);font-family
     <button class="wbtn" id="wbtn" onclick="connectWallet()">Connect Wallet</button>
   </div>
 </header>
-
 <div class="banner" onclick="window.open('https://testnet.pharosscan.xyz/address/'+CONTRACT,'_blank')">
   PharosLend v2 live on Pharos Atlantic Testnet · 5 assets: USDC · USDT · WBTC · WETH · WPHRS · View on explorer ↗
 </div>
-
 <main class="main">
-
 <!-- MARKETS -->
 <section class="page on" id="page-markets">
   <div class="ph">
@@ -357,7 +339,6 @@ footer{text-align:center;padding:24px;border-top:1px solid var(--b0);font-family
   </div>
   <div class="mlist" id="mrows"></div>
 </section>
-
 <!-- DASHBOARD -->
 <section class="page" id="page-dashboard">
   <div class="ph">
@@ -402,7 +383,6 @@ footer{text-align:center;padding:24px;border-top:1px solid var(--b0);font-family
       <div id="borPos"><div class="pe">No borrow positions yet.</div></div>
     </div>
   </div>
-
   <!-- WALLET BALANCES -->
   <div class="dc" style="margin-top:18px">
     <div class="dh">
@@ -417,7 +397,6 @@ footer{text-align:center;padding:24px;border-top:1px solid var(--b0);font-family
     </div>
   </div>
 </section>
-
 <!-- FAUCET -->
 <section class="page" id="page-faucet">
   <div class="ph">
@@ -536,9 +515,7 @@ footer{text-align:center;padding:24px;border-top:1px solid var(--b0);font-family
     </div>
   </div>
 </section>
-
 </main>
-
 <!-- MODAL -->
 <div class="ov" id="ov">
   <div class="modal">
@@ -593,9 +570,7 @@ footer{text-align:center;padding:24px;border-top:1px solid var(--b0);font-family
     </div>
   </div>
 </div>
-
 <div class="toast" id="toast"></div>
-
 <!-- WALLET PICKER -->
 <div class="wp-ov" id="wpov" onclick="if(event.target===this)this.classList.remove('on')">
   <div class="wp-modal">
@@ -605,109 +580,70 @@ footer{text-align:center;padding:24px;border-top:1px solid var(--b0);font-family
     <button class="wp-cancel" onclick="document.getElementById('wpov').classList.remove('on')">Cancel</button>
   </div>
 </div>
-
 <footer>
   PharosLend v2 · Pharos Atlantic Testnet · Chain ID 688689 · 5 assets<br>
   USDC · USDT · WBTC · WETH · WPHRS<br>
   ⚠ Testnet only — no real funds
 </footer>
-
 <script>
-// ═══════════════════════════════════════════════════════════════
-//  PharosLend v2 — Pharos Testnet (Chain ID 688688)
-//  Paste your deployed contract address below after Remix deploy.
-// ═══════════════════════════════════════════════════════════════
-const CONTRACT  = "0x1087826FCF0256A17604461D3181003Fa0A625d1"; // Pharos Atlantic (688689)
-const CHAIN_ID  = 688689;  // Pharos Atlantic Testnet
+const CONTRACT  = "0x1087826FCF0256A17604461D3181003Fa0A625d1";
+const CHAIN_ID  = 688689;
 const EXPLORER  = "https://atlantic.pharosscan.xyz";
 const RPC_URL   = "https://atlantic.dplabs-internal.com";
-
 document.getElementById("contractAddr").textContent = CONTRACT;
-
-// ── TOKEN REGISTRY ────────────────────────────────────────────
 const MKT = [
-  { sym:"USDC",  name:"USD Coin",       addr:"0xcfC8330f4BCAB529c625D12781b1C19466A9Fc8B", dec:6,  price:1,     apy:5.20, apr:8.90,  ltv:90, cls:"usdc" },
-  { sym:"USDT",  name:"Tether USD",     addr:"0xE7E84B8B4f39C507499c40B4ac199B050e2882d5", dec:6,  price:1,     apy:4.80, apr:8.20,  ltv:90, cls:"usdt" },
+  { sym:"USDC",  name:"USD Coin",        addr:"0xcfC8330f4BCAB529c625D12781b1C19466A9Fc8B", dec:6,  price:1,     apy:5.20, apr:8.90,  ltv:90, cls:"usdc" },
+  { sym:"USDT",  name:"Tether USD",      addr:"0xE7E84B8B4f39C507499c40B4ac199B050e2882d5", dec:6,  price:1,     apy:4.80, apr:8.20,  ltv:90, cls:"usdt" },
   { sym:"WBTC",  name:"Wrapped Bitcoin", addr:"0x0c64F03EEa5c30946D5c55B4b532D08ad74638a4", dec:18, price:98000, apy:1.50, apr:4.50,  ltv:75, cls:"wbtc" },
-  { sym:"WETH",  name:"Wrapped Ether",  addr:"0x7d211F77525ea39A0592794f793cC1036eEaccD5", dec:18, price:3200,  apy:2.50, apr:5.80,  ltv:80, cls:"weth" },
-  { sym:"WPHRS", name:"Wrapped PHRS",   addr:"0x838800b758277CC111B2d48Ab01e5E164f8E9471", dec:18, price:1,     apy:8.00, apr:14.00, ltv:65, cls:"wphrs"},
+  { sym:"WETH",  name:"Wrapped Ether",   addr:"0x7d211F77525ea39A0592794f793cC1036eEaccD5", dec:18, price:3200,  apy:2.50, apr:5.80,  ltv:80, cls:"weth" },
+  { sym:"WPHRS", name:"Wrapped PHRS",    addr:"0x838800b758277CC111B2d48Ab01e5E164f8E9471", dec:18, price:1,     apy:8.00, apr:14.00, ltv:65, cls:"wphrs"},
 ];
-// per-token market data from chain
 MKT.forEach(m => { m.ts=0; m.tb=0; m.liq=0; });
-
-// ── FUNCTION SELECTORS ────────────────────────────────────────
 const SEL = {
-  supply:          "0xf2b9fdb8",
-  withdraw:        "0xf3fef3a3",
-  borrow:          "0x4b8a3529",
-  repay:           "0x22867d78",
-  getStats:        "0xc59d4847",
-  getPosition:     "0x16c19739",
-  getTokenPos:     "0x57b7d3d5",
-  getMarketData:   "0xa30c302d",
-  balanceOf:       "0x70a08231",
-  approve:         "0x095ea7b3",
+  supply:"0xf2b9fdb8", withdraw:"0xf3fef3a3", borrow:"0x4b8a3529", repay:"0x22867d78",
+  getStats:"0xc59d4847", getPosition:"0x16c19739", getTokenPos:"0x57b7d3d5",
+  getMarketData:"0xa30c302d", balanceOf:"0x70a08231", approve:"0x095ea7b3",
 };
-
-// ── STATE ─────────────────────────────────────────────────────
 let wallet=null, connected=false;
-let bals={};         // sym → token balance
-let pos={colUsd:0, debtUsd:0, hf:Infinity, avail:0};
-let tpos={};         // addr → {sAmt,bAmt,sUsd,bUsd}
-let mode="supply", sym="USDC";
-let approvedAmt=0;
-let refreshTimer=null;
-
-// ── WALLET DISCOVERY (EIP-6963 + legacy fallback) ─────────────
-const _eip6963 = [];   // wallets announced via EIP-6963
-let _selectedProvider = null;
-
-window.addEventListener("eip6963:announceProvider", e => {
-  if(!_eip6963.find(w=>w.info.uuid===e.detail.info.uuid))
-    _eip6963.push(e.detail);  // {info:{name,icon,uuid,rdns}, provider}
+let bals={}, pos={colUsd:0,debtUsd:0,hf:Infinity,avail:0}, tpos={};
+let mode="supply", sym="USDC", approvedAmt=0, refreshTimer=null;
+const _eip6963=[];
+let _selectedProvider=null;
+window.addEventListener("eip6963:announceProvider",e=>{
+  if(!_eip6963.find(w=>w.info.uuid===e.detail.info.uuid)) _eip6963.push(e.detail);
 });
-
 function _legacyWallets(){
   const out=[];
-  if(!window.ethereum) return out;
-  const provs=window.ethereum.providers?.length ? window.ethereum.providers : [window.ethereum];
+  if(!window.ethereum)return out;
+  const provs=window.ethereum.providers?.length?window.ethereum.providers:[window.ethereum];
   provs.forEach(p=>{
     const name=p.isRabby?"Rabby":p.isMetaMask?"MetaMask":p.isBraveWallet?"Brave":p.isOKExWallet||p.isOKX?"OKX":"Wallet";
     out.push({info:{name,icon:"",uuid:name},provider:p});
   });
   return out;
 }
-
-function getProvider(){ return _selectedProvider || window.ethereum || null; }
-
-// ── CONNECT ───────────────────────────────────────────────────
+function getProvider(){return _selectedProvider||window.ethereum||null;}
 async function connectWallet(){
-  if(connected) return;
-  // Wait briefly for EIP-6963 announcements
+  if(connected)return;
   await new Promise(r=>setTimeout(r,120));
-  const all = _eip6963.length ? _eip6963 : _legacyWallets();
-  console.log("Wallets found:", all.map(w=>w.info.name));
-  if(!all.length){ toast("No wallet detected — install MetaMask or Rabby","err"); return; }
-  if(all.length===1){ _selectedProvider=all[0].provider; await _doConnect(); return; }
-  // Multiple wallets → show picker
+  const all=_eip6963.length?_eip6963:_legacyWallets();
+  console.log("Wallets found:",all.map(w=>w.info.name));
+  if(!all.length){toast("No wallet detected — install MetaMask or Rabby","err");return;}
+  if(all.length===1){_selectedProvider=all[0].provider;await _doConnect();return;}
   const list=document.getElementById("wp-list");
   list.innerHTML=all.map((w,i)=>`
     <button class="wp-btn" onclick="pickWallet(${i})">
-      ${w.info.icon
-        ? `<div class="wp-ico"><img src="${w.info.icon}"></div>`
-        : `<div class="wp-ico">${w.info.name.slice(0,2).toUpperCase()}</div>`}
+      ${w.info.icon?`<div class="wp-ico"><img src="${w.info.icon}"></div>`:`<div class="wp-ico">${w.info.name.slice(0,2).toUpperCase()}</div>`}
       <span>${w.info.name}</span>
     </button>`).join("");
   window._wpAll=all;
   document.getElementById("wpov").classList.add("on");
 }
-
 async function pickWallet(i){
   document.getElementById("wpov").classList.remove("on");
   _selectedProvider=window._wpAll[i].provider;
   await _doConnect();
 }
-
 async function _doConnect(){
   const eth=getProvider();
   if(!eth){toast("Wallet not available","err");return;}
@@ -716,23 +652,21 @@ async function _doConnect(){
     const accs=await eth.request({method:"eth_requestAccounts"});
     if(!accs||!accs.length){toast("No account returned","err");return;}
     wallet=accs[0];
-    console.log("Connected wallet:",wallet);
     const cid=parseInt(await eth.request({method:"eth_chainId"}),16);
-    console.log("Chain ID:",cid,"(expected:",CHAIN_ID,")");
-    if(cid!==CHAIN_ID){ await addPharosNet(); }
+    if(cid!==CHAIN_ID){await addPharosNet();}
     connected=true;
     const btn=document.getElementById("wbtn");
     btn.textContent=wallet.slice(0,6)+"…"+wallet.slice(-4);
     btn.classList.add("on");
-    await loadAll(); renderAll();
     toast("✓ Connected: "+wallet.slice(0,6)+"…"+wallet.slice(-4),"ok");
+    await sleep(600);
+    await loadAll(); renderAll();
     startAutoRefresh();
   }catch(e){
     console.error("Connect error:",e);
     toast("Error: "+e.message,"err");
   }
 }
-
 async function addPharosNet(){
   const eth=getProvider();
   if(!eth){toast("Install MetaMask first.","err");return;}
@@ -752,34 +686,22 @@ async function addPharosNet(){
     }else if(e.code!==4001){toast("Error: "+e.message,"err");}
   }
 }
-
 function startAutoRefresh(){
   clearInterval(refreshTimer);
   refreshTimer=setInterval(async()=>{if(connected){await loadAll();renderAll();}},30000);
 }
-
-// ── HELPERS ───────────────────────────────────────────────────
 function pad(v,len=64){return v.replace("0x","").padStart(len,"0");}
-function readU256(hex,slot){return BigInt("0x"+hex.slice(2+slot*64, 2+slot*64+64));}
-
-// eth_call goes through the wallet provider — it handles CORS and uses
-// the correct chain RPC automatically. No direct browser→RPC fetch needed.
-// eth_call is read-only and works even before the user approves the site.
+function readU256(hex,slot){return BigInt("0x"+hex.slice(2+slot*64,2+slot*64+64));}
 let _rpcId=0;
 async function ethCall(to,data){
-  // Prefer selected provider, fall back to window.ethereum
   const eth=_selectedProvider||window.ethereum||null;
   if(eth){
-    try{
-      return await eth.request({method:"eth_call",params:[{to,data},"latest"]});
-    }catch(e){console.warn("eth_call via wallet failed:",e.message);}
+    try{return await eth.request({method:"eth_call",params:[{to,data},"latest"]});}
+    catch(e){console.warn("eth_call via wallet failed:",e.message);}
   }
-  // Last-resort: direct RPC (likely blocked by CORS in browser, for debug only)
   try{
-    const res=await fetch(RPC_URL,{method:"POST",
-      headers:{"Content-Type":"application/json"},
-      body:JSON.stringify({jsonrpc:"2.0",id:++_rpcId,method:"eth_call",params:[{to,data},"latest"]})
-    });
+    const res=await fetch(RPC_URL,{method:"POST",headers:{"Content-Type":"application/json"},
+      body:JSON.stringify({jsonrpc:"2.0",id:++_rpcId,method:"eth_call",params:[{to,data},"latest"]})});
     const j=await res.json();
     if(j.error){console.warn("eth_call error:",j.error.message);return null;}
     return j.result;
@@ -790,34 +712,22 @@ function fmt(amount,dec,dp=4){
   return n<0.0001&&n>0?"<0.0001":n.toFixed(dp);
 }
 function fmtUsd(usd6){return "$"+(Number(usd6)/1e6).toFixed(2);}
-
-// ── DATA LOADING ──────────────────────────────────────────────
-async function loadAll(){
-  await Promise.all([loadBals(), loadContract()]);
-}
-
+async function loadAll(){await Promise.all([loadBals(),loadContract()]);}
 async function loadBals(){
   if(!wallet)return;
-  // Native PHRS balance via wallet provider
   try{
     const eth=_selectedProvider||window.ethereum;
     const r=await eth.request({method:"eth_getBalance",params:[wallet,"latest"]});
-    if(r) bals["PHRS"]=BigInt(r);
-    console.log("Native PHRS (wei):",r,"=",(Number(BigInt(r||"0x0"))/1e18).toFixed(4),"PHRS");
+    if(r)bals["PHRS"]=BigInt(r);
   }catch(e){console.warn("getBalance error:",e);}
-  // ERC-20 balances
   for(const m of MKT){
-    const r=await ethCall(m.addr, SEL.balanceOf+pad(wallet));
+    const r=await ethCall(m.addr,SEL.balanceOf+pad(wallet));
     bals[m.sym]=r?BigInt(r):0n;
-    console.log(m.sym,"balance raw:",r,"=",r?Number(BigInt(r))/(10**m.dec):0);
   }
 }
-
 async function loadContract(){
   if(CONTRACT.includes("YOUR"))return;
-
-  // ── getStats (no wallet needed) ──────────────────────────────
-  const rs=await ethCall(CONTRACT, SEL.getStats);
+  const rs=await ethCall(CONTRACT,SEL.getStats);
   if(rs&&rs.length>10){
     document.getElementById("kTX").textContent=Number(readU256(rs,2));
     const tsu=readU256(rs,0),tbu=readU256(rs,1),util=readU256(rs,3);
@@ -825,95 +735,81 @@ async function loadContract(){
     document.getElementById("kB").textContent=fmtUsd(tbu);
     document.getElementById("kU").textContent=(Number(util)/100).toFixed(1)+"%";
   }
-
-  // ── per-token market data (no wallet needed) ─────────────────
   for(const m of MKT){
-    const rmd=await ethCall(CONTRACT, SEL.getMarketData+pad(m.addr));
+    const rmd=await ethCall(CONTRACT,SEL.getMarketData+pad(m.addr));
     if(rmd&&rmd.length>10){
-      m.ts  =Number(readU256(rmd,2))/1e6;
-      m.tb  =Number(readU256(rmd,3))/1e6;
-      m.liq =readU256(rmd,4);
-      m.price=Number(readU256(rmd,7))/1e6;
-      m.apy =Number(readU256(rmd,5))/100;
-      m.apr =Number(readU256(rmd,6))/100;
-      m.ltv =Number(readU256(rmd,8))/100;
+      m.ts=Number(readU256(rmd,2))/1e6; m.tb=Number(readU256(rmd,3))/1e6;
+      m.liq=readU256(rmd,4); m.price=Number(readU256(rmd,7))/1e6;
+      m.apy=Number(readU256(rmd,5))/100; m.apr=Number(readU256(rmd,6))/100;
+      m.ltv=Number(readU256(rmd,8))/100;
     }
   }
-
-  // ── wallet-specific data (only when connected) ───────────────
   if(!wallet)return;
-
-  const rp=await ethCall(CONTRACT, SEL.getPosition+pad(wallet));
+  // Reset sempre antes de carregar — zeros antigos nunca escondem posições reais
+  tpos={};
+  let rp=await ethCall(CONTRACT,SEL.getPosition+pad(wallet));
+  if(!rp||rp.length<=10){await sleep(400);rp=await ethCall(CONTRACT,SEL.getPosition+pad(wallet));}
   if(rp&&rp.length>10){
-    pos.colUsd = readU256(rp,0);
-    pos.debtUsd= readU256(rp,1);
-    const hfRaw= readU256(rp,2);
-    pos.hf     = hfRaw===BigInt("0x"+("f".repeat(64)))?Infinity:Number(hfRaw)/10000;
-    pos.avail  = readU256(rp,3);
+    pos.colUsd=readU256(rp,0); pos.debtUsd=readU256(rp,1);
+    const hfRaw=readU256(rp,2);
+    pos.hf=hfRaw===BigInt("0x"+("f".repeat(64)))?Infinity:Number(hfRaw)/10000;
+    pos.avail=readU256(rp,3);
+    console.log("Position — col:",Number(pos.colUsd)/1e6,"debt:",Number(pos.debtUsd)/1e6,"hf:",pos.hf);
   }
-
   for(const m of MKT){
-    const rtd=await ethCall(CONTRACT, SEL.getTokenPos+pad(wallet)+pad(m.addr));
+    // Retry automático se falhar — corrige USDC/USDT que falham nos primeiros ms
+    let rtd=await ethCall(CONTRACT,SEL.getTokenPos+pad(wallet)+pad(m.addr));
+    if(!rtd||rtd.length<=10){await sleep(350);rtd=await ethCall(CONTRACT,SEL.getTokenPos+pad(wallet)+pad(m.addr));}
     if(rtd&&rtd.length>10){
-      tpos[m.addr]={
-        sAmt:readU256(rtd,0), bAmt:readU256(rtd,1),
-        sUsd:readU256(rtd,2), bUsd:readU256(rtd,3)
-      };
+      const sAmt=readU256(rtd,0),bAmt=readU256(rtd,1);
+      const sUsd=readU256(rtd,2),bUsd=readU256(rtd,3);
+      console.log(m.sym,"→ sAmt:",sAmt.toString(),"bAmt:",bAmt.toString(),
+                  "sUsd:",Number(sUsd)/1e6,"bUsd:",Number(bUsd)/1e6);
+      tpos[m.addr]={sAmt,bAmt,sUsd,bUsd};
+    }else{
+      console.warn(m.sym,"getTokenPos null/empty após retry");
     }
   }
 }
-
-// ── MODAL ─────────────────────────────────────────────────────
 function openModal(m,s){
   if(!connected){toast("Connect wallet first!","err");return;}
-  mode=m; sym=s; approvedAmt=0;
+  mode=m;sym=s;approvedAmt=0;
   const mk=MKT.find(x=>x.sym===s);
-  document.getElementById("mtitle").textContent=
-    m==="supply"?"Supply":m==="withdraw"?"Withdraw":m==="borrow"?"Borrow":"Repay";
+  document.getElementById("mtitle").textContent=m==="supply"?"Supply":m==="withdraw"?"Withdraw":m==="borrow"?"Borrow":"Repay";
   const ic=document.getElementById("mico");
-  ic.className="aico "+mk.cls; ic.textContent=s.length>4?s.slice(1):s;
+  ic.className="aico "+mk.cls;ic.textContent=s.length>4?s.slice(1):s;
   document.getElementById("mname").textContent=s;
   document.getElementById("msub").textContent=mk.name+" · Pharos Testnet";
   document.getElementById("munit").textContent=s;
   document.getElementById("minp").value="";
-
   const isEarn=m==="supply"||m==="repay";
   const rate=isEarn?mk.apy:mk.apr;
   const rateEl=document.getElementById("mrate");
   rateEl.textContent=rate.toFixed(2)+"%";
   rateEl.className="marv "+(isEarn?"g":"r");
   document.getElementById("mratel").textContent=isEarn?"APY":"APR";
-
-  // available amount
   let av=0;
-  if(m==="supply"||m==="repay"){
-    av=Number(bals[s]||0n)/(10**mk.dec);
-  }else if(m==="withdraw"){
-    av=Number((tpos[mk.addr]?.sAmt)||0n)/(10**mk.dec);
-  }else{ // borrow
-    const availUsd=Number(pos.avail)/1e6;
-    av=availUsd/mk.price;
-  }
+  if(m==="supply"||m==="repay"){av=Number(bals[s]||0n)/(10**mk.dec);}
+  else if(m==="withdraw"){av=Number((tpos[mk.addr]?.sAmt)||0n)/(10**mk.dec);}
+  else{av=Number(pos.avail)/1e6/mk.price;}
   document.getElementById("mbal").textContent="Available: "+av.toFixed(mk.dec===6?4:6)+" "+s;
   document.getElementById("minp").max=av;
-
-  const si=document.getElementById("stepIndicator");
-  const btns=document.getElementById("mbtns");
+  const si=document.getElementById("stepIndicator"),btns=document.getElementById("mbtns");
   const ap=document.getElementById("mappbtn"),ac=document.getElementById("mactbtn");
   if(m==="supply"||m==="repay"){
-    si.style.display="flex"; setStep(1); btns.className="mbtns";
-    ap.style.display="block"; ap.textContent="1. Approve "+s;
-    ap.className="mbtn app"; ap.disabled=false;
+    si.style.display="flex";setStep(1);btns.className="mbtns";
+    ap.style.display="block";ap.textContent="1. Approve "+s;
+    ap.className="mbtn app";ap.disabled=false;
     ac.textContent=m==="supply"?"2. Supply":"2. Repay";
-    ac.className=m==="supply"?"mbtn sup":"mbtn rep"; ac.disabled=true;
+    ac.className=m==="supply"?"mbtn sup":"mbtn rep";ac.disabled=true;
   }else if(m==="borrow"){
-    si.style.display="none"; btns.className="mbtns s1";
-    ap.style.display="none"; ac.textContent="Borrow "+s;
-    ac.className="mbtn bor"; ac.disabled=false;
+    si.style.display="none";btns.className="mbtns s1";
+    ap.style.display="none";ac.textContent="Borrow "+s;
+    ac.className="mbtn bor";ac.disabled=false;
   }else{
-    si.style.display="none"; btns.className="mbtns s1";
-    ap.style.display="none"; ac.textContent="Withdraw "+s;
-    ac.className="mbtn wit"; ac.disabled=false;
+    si.style.display="none";btns.className="mbtns s1";
+    ap.style.display="none";ac.textContent="Withdraw "+s;
+    ac.className="mbtn wit";ac.disabled=false;
   }
   document.getElementById("tihfr").style.display=(m==="borrow"||m==="withdraw")?"flex":"none";
   document.getElementById("txst").className="txst";
@@ -922,7 +818,6 @@ function openModal(m,s){
   document.getElementById("ov").classList.add("on");
   setTimeout(()=>document.getElementById("minp").focus(),60);
 }
-
 function setStep(n){
   const sc1=document.getElementById("sc1"),sc2=document.getElementById("sc2");
   const sl1=document.getElementById("sl1"),sl2=document.getElementById("sl2");
@@ -930,23 +825,18 @@ function setStep(n){
   else if(n===2){sc1.className="step-circle done";sl1.className="step-label done";sc2.className="step-circle active";sl2.className="step-label active";}
   else{sc1.className="step-circle done";sl1.className="step-label done";sc2.className="step-circle done";sl2.className="step-label done";}
 }
-
 function closeModal(){document.getElementById("ov").classList.remove("on");approvedAmt=0;}
 function setMax(){const v=parseFloat(document.getElementById("minp").max)||0;document.getElementById("minp").value=v;onChg();}
-
 function onChg(){
   const amt=parseFloat(document.getElementById("minp").value)||0;
   const mk=MKT.find(x=>x.sym===sym);
   const isEarn=mode==="supply"||mode==="repay";
-  const rate=isEarn?mk.apy:mk.apr;
-  document.getElementById("tirate").textContent=rate.toFixed(2)+"%";
+  document.getElementById("tirate").textContent=(isEarn?mk.apy:mk.apr).toFixed(2)+"%";
   const usdVal=amt*mk.price;
   document.getElementById("tiusd").textContent=amt>0?"$"+usdVal.toFixed(2):"—";
   if(mode==="borrow"||mode==="withdraw"){
-    const col=Number(pos.colUsd)/1e6, debt=Number(pos.debtUsd)/1e6;
-    const addDebt=mode==="borrow"?usdVal:0;
-    const subCol=mode==="withdraw"?usdVal:0;
-    const newCol=col-subCol, newDebt=debt+addDebt;
+    const col=Number(pos.colUsd)/1e6,debt=Number(pos.debtUsd)/1e6;
+    const newCol=col-(mode==="withdraw"?usdVal:0),newDebt=debt+(mode==="borrow"?usdVal:0);
     const hf=newDebt>0?(newCol*0.85)/newDebt:Infinity;
     const el=document.getElementById("tihf");
     el.textContent=isFinite(hf)?hf.toFixed(2):"∞";
@@ -958,8 +848,6 @@ function onChg(){
     const ap=document.getElementById("mappbtn");ap.className="mbtn app";ap.disabled=false;approvedAmt=0;
   }
 }
-
-// ── APPROVE ───────────────────────────────────────────────────
 async function doApprove(){
   const amt=parseFloat(document.getElementById("minp").value);
   if(!amt||amt<=0){toast("Enter an amount first","err");return;}
@@ -969,7 +857,7 @@ async function doApprove(){
   const amtWei=BigInt(Math.round(amt*(10**mk.dec)));
   const data=SEL.approve+pad(CONTRACT)+pad(amtWei.toString(16));
   const ap=document.getElementById("mappbtn"),ac=document.getElementById("mactbtn");
-  ap.disabled=true; showTx("⏳ Waiting for approval in wallet…");
+  ap.disabled=true;showTx("⏳ Waiting for approval in wallet…");
   const eth=getProvider();
   try{
     const hash=await eth.request({method:"eth_sendTransaction",params:[{from:wallet,to:mk.addr,data,gas:"0x30D40"}]});
@@ -992,8 +880,6 @@ async function doApprove(){
     ap.disabled=false;clearTx();
   }
 }
-
-// ── ACTION ────────────────────────────────────────────────────
 async function doAction(){
   const amt=parseFloat(document.getElementById("minp").value);
   if(!amt||amt<=0){toast("Enter an amount first","err");return;}
@@ -1002,20 +888,19 @@ async function doAction(){
   const amtWei=BigInt(Math.round(amt*(10**mk.dec)));
   const data=SEL[mode]+pad(mk.addr)+pad(amtWei.toString(16));
   const ac=document.getElementById("mactbtn");
-  ac.disabled=true; showTx("⏳ Waiting for "+mode+" in wallet…");
+  ac.disabled=true;showTx("⏳ Waiting for "+mode+" in wallet…");
   const eth=getProvider();
   try{
     const hash=await eth.request({method:"eth_sendTransaction",params:[{from:wallet,to:CONTRACT,data,gas:"0x6ACFC0"}]});
     showTx("✅ "+cap(mode)+" submitted!\n"+hash);
     toast("✓ "+cap(mode)+" "+amt.toFixed(4)+" "+sym+" submitted!","ok");
     setStep(3);
-    await sleep(4000); await loadAll(); renderAll(); closeModal();
+    await sleep(4000);await loadAll();renderAll();closeModal();
   }catch(e){
     if(e.code===4001)toast("Cancelled","err");else toast("Error: "+e.message,"err");
     ac.disabled=false;clearTx();
   }
 }
-
 async function waitForReceipt(hash,maxMs=60000){
   const t0=Date.now();let delay=1500;
   const eth=getProvider();
@@ -1026,10 +911,7 @@ async function waitForReceipt(hash,maxMs=60000){
   }
   return null;
 }
-
-// ── RENDER ────────────────────────────────────────────────────
 function renderAll(){renderMarkets();renderDashboard();renderBalances();}
-
 function renderMarkets(){
   document.getElementById("mrows").innerHTML=MKT.map(mk=>{
     const u=mk.ts>0?mk.tb/mk.ts*100:0;
@@ -1062,35 +944,18 @@ function renderMarkets(){
     </div>`;
   }).join("");
 }
-
-// ── WALLET BALANCES ───────────────────────────────────────────
 function renderBalances(){
-  // Update header PHRS pill
   const phrs=bals["PHRS"]||0n;
   const phrsAmt=Number(phrs)/1e18;
-  const pb=document.getElementById("phrsBal");
-  const pa=document.getElementById("phrsAmt");
-  if(pb&&pa){
-    pa.textContent=phrsAmt.toFixed(3);
-    if(connected)pb.classList.add("on"); else pb.classList.remove("on");
-  }
-
-  // Explorer link for wallet
+  const pb=document.getElementById("phrsBal"),pa=document.getElementById("phrsAmt");
+  if(pb&&pa){pa.textContent=phrsAmt.toFixed(3);if(connected)pb.classList.add("on");else pb.classList.remove("on");}
   const expLink=document.getElementById("expLink");
-  if(expLink&&wallet){
-    expLink.href=EXPLORER+"/address/"+wallet;
-    expLink.style.display="inline-flex";
-  }
-
-  // Balances grid
+  if(expLink&&wallet){expLink.href=EXPLORER+"/address/"+wallet;expLink.style.display="inline-flex";}
   const grid=document.getElementById("balsGrid");
   if(!grid)return;
   if(!connected){grid.innerHTML='<div class="pe" style="grid-column:1/-1">Conecta a carteira para ver saldos</div>';return;}
-
-  let totalUsd=phrsAmt*1; // PHRS ~$1
+  let totalUsd=phrsAmt*1;
   const cards=[];
-
-  // Native PHRS card
   cards.push(`<div class="bal-card">
     <div class="bal-top">
       <div class="aico wphrs" style="width:28px;height:28px;font-size:.48rem">PHRS</div>
@@ -1099,8 +964,6 @@ function renderBalances(){
     <div class="bal-amt">${phrsAmt.toFixed(4)}</div>
     <div class="bal-usd">~$${phrsAmt.toFixed(2)}</div>
   </div>`);
-
-  // ERC-20 tokens
   MKT.forEach(mk=>{
     const raw=bals[mk.sym]||0n;
     const amt=Number(raw)/(10**mk.dec);
@@ -1116,21 +979,17 @@ function renderBalances(){
       <div class="bal-usd">$${usd.toFixed(2)}</div>
     </div>`);
   });
-
   grid.innerHTML=cards.join("");
   const tw=document.getElementById("totalWalletUsd");
   if(tw)tw.textContent="$"+totalUsd.toFixed(2);
 }
-
 function renderDashboard(){
-  const colUsd=Number(pos.colUsd)/1e6, debtUsd=Number(pos.debtUsd)/1e6;
-  const avail=Number(pos.avail)/1e6;
+  const colUsd=Number(pos.colUsd)/1e6,debtUsd=Number(pos.debtUsd)/1e6,avail=Number(pos.avail)/1e6;
   document.getElementById("dS").textContent="$"+colUsd.toFixed(2);
   document.getElementById("dB").textContent="$"+debtUsd.toFixed(2);
   document.getElementById("dAv").textContent="$"+avail.toFixed(2);
   document.getElementById("dST").textContent="$"+colUsd.toFixed(2);
   document.getElementById("dBT").textContent="$"+debtUsd.toFixed(2);
-
   const hf=pos.hf;
   const hfEl=document.getElementById("hfval"),hfNum=document.getElementById("hfn"),badge=document.getElementById("hfbadge");
   const fill=document.getElementById("hff"),needle=document.getElementById("hfneedle");
@@ -1144,7 +1003,6 @@ function renderDashboard(){
     const pct=Math.min(hf/3*100,100);
     fill.style.width=pct+"%";needle.style.left="calc("+pct+"% - 1px)";needle.style.display="block";
   }
-
   const sr=[],br=[];
   for(const mk of MKT){
     const tp=tpos[mk.addr];
@@ -1155,7 +1013,6 @@ function renderDashboard(){
   document.getElementById("supPos").innerHTML=sr.length?sr.join(""):`<div class="pe">No supply positions yet.<br>Go to Markets → Supply.</div>`;
   document.getElementById("borPos").innerHTML=br.length?br.join(""):`<div class="pe">No borrow positions yet.</div>`;
 }
-
 function posRow(mk,amt,usd,isS){
   const act=isS?"withdraw":"repay";
   const amtFmt=fmt(amt,mk.dec,mk.dec===6?4:6);
@@ -1175,7 +1032,6 @@ function posRow(mk,amt,usd,isS){
     </div>
   </div>`;
 }
-
 function showTx(msg){
   const el=document.getElementById("txst");el.className="txst on";
   el.innerHTML=msg.split("\n").map((l,i)=>{
@@ -1201,13 +1057,8 @@ function copyAddr(addr,btn){
     setTimeout(()=>{btn.textContent="copy";btn.classList.remove("copied");},2000);
   }).catch(()=>toast("Copia manualmente: "+addr,"inf"));
 }
-
 document.getElementById("ov").addEventListener("click",e=>{if(e.target===document.getElementById("ov"))closeModal();});
-
-// Request EIP-6963 wallet announcements immediately
 window.dispatchEvent(new Event("eip6963:requestProvider"));
-
-// Watch for wallet events (accounts / chain change)
 function _watchProvider(eth){
   if(!eth||!eth.on)return;
   try{
@@ -1219,9 +1070,7 @@ function _watchProvider(eth){
     eth.on("chainChanged",()=>location.reload());
   }catch(e){console.warn("Provider event error:",e);}
 }
-if(window.ethereum) _watchProvider(window.ethereum);
-
-// Load market data immediately on page load (no wallet needed — direct RPC)
+if(window.ethereum)_watchProvider(window.ethereum);
 loadContract().then(renderAll);
 </script>
 </body>
